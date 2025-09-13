@@ -1,0 +1,309 @@
+---
+import CollectionsListbox from './CollectionsListbox.tsx';
+import TraitsExplorer from './TraitsExplorer.tsx';
+import CharacterGrid from './CharacterGrid.astro';
+import type { ExtendedResourceNode as ResourceNode } from '../types';
+
+export interface Props {
+  route: string;
+  slug: string;
+  resources: Record<string, ResourceNode[]>;
+}
+
+const { route, slug, resources } = Astro.props;
+
+const IMAGE_URL = '/media/custom/';
+const hasCustomImage = [
+  'class-timberbeast',
+  'class-amish',
+  'class-woke',
+  'class-fantasy',
+  'class-connoisseur',
+  'class-wounded',
+  'class-alien',
+  'class-pirate',
+  'class-jock',
+  'class-robot',
+  'class-billionaire',
+  'class-legend',
+  'class-filthy',
+  'class-extinct',
+  'class-the-band',
+  'class-evil',
+  'class-inbred',
+  'class-skeleton',
+  'class-shopkeeper',
+  'class-outsiders',
+  'class-mutant',
+  'class-royal',
+  'class-zombie',
+  'class-wizard',
+  'class-guardian',
+  'class-media',
+  'class-hipster',
+  'class-deranged',
+  'attack-abyss-gaze',
+  'attack-army-of-animals',
+  'attack-assault-rifle',
+  'attack-awful-breath',
+  'attack-awful-smell',
+  'attack-bad-confidence',
+  'attack-bark',
+  'attack-beard-tickle',
+  'attack-bend-and-break',
+  'attack-berry-blast',
+  'attack-big-belly-crush',
+  'attack-big-blow',
+  'attack-bite',
+  'attack-blazing-breath',
+  'attack-blinding-lights',
+  'attack-blood-cannon',
+  'attack-brainstorm',
+  'attack-brown-banana',
+  'attack-burn',
+  'attack-burning-tale',
+  'attack-burst-balloon',
+  'attack-camouflage',
+  'attack-cheat',
+  'attack-chocolate-poison',
+  'attack-chopstick-jab',
+  'attack-cigar-burn',
+  'attack-cigarette-burn',
+  'attack-clean-dirt',
+  'attack-club-attack',
+  'attack-color-bomb',
+  'attack-comfort',
+  'attack-confundo',
+  'attack-cover-strike',
+  'attack-creeping-venom',
+  'attack-cringe-behaviour',
+  'attack-cuff-slam',
+  'attack-cursed-coin',
+  'attack-cut',
+  'attack-cutlery-swing',
+  'attack-dab',
+  'attack-deep-throat',
+  'attack-deep-voice',
+  'attack-desperate-plea',
+  'attack-disguise',
+  'attack-double-bag-swing',
+  'attack-double-banana',
+];
+const hasCustomImages = [`class`, `attack`];
+
+const traitType = route;
+const traitValue = slug;
+const fullTraitSlug = `${traitType}-${traitValue}`;
+
+const useCustomImage = hasCustomImage.includes(fullTraitSlug);
+const useGenericImage = hasCustomImages.includes(traitType);
+const hasImage = useCustomImage || useGenericImage;
+
+const traitNode = resources[route]?.find(
+  (resource: ResourceNode) => resource.slug === fullTraitSlug
+);
+
+const allCharacters: ResourceNode[] = [];
+['people', 'animals', 'stuff'].forEach((collection) => {
+  if (resources[collection]) {
+    resources[collection].forEach((resource: ResourceNode) => {
+      const payload = resource.optionsPayload || {};
+      let hasMatchingTrait = false;
+      switch (traitType) {
+        case 'class':
+          hasMatchingTrait = payload.class === fullTraitSlug;
+          break;
+        case 'attack':
+          hasMatchingTrait = payload.attack === fullTraitSlug;
+          break;
+        case 'special':
+          hasMatchingTrait = payload.special === fullTraitSlug;
+          break;
+        case 'species':
+          hasMatchingTrait = payload.species === fullTraitSlug;
+          break;
+        case 'profession':
+          hasMatchingTrait = payload.profession === fullTraitSlug;
+          break;
+      }
+      if (hasMatchingTrait) {
+        allCharacters.push({
+          ...resource,
+          collection,
+          rarityOrder: payload?.rarityOrder ?? Infinity,
+        });
+      }
+    });
+  }
+});
+const representativeCharacter = allCharacters.reduce(
+  (best: ResourceNode | null, current: ResourceNode) => {
+    return !best ||
+      (current.rarityOrder ?? Infinity) < (best.rarityOrder ?? Infinity)
+      ? current
+      : best;
+  },
+  null
+);
+
+const formatTraitValue = (value: string) => {
+  if (!value) return '';
+  return value
+    .replace(/^(class|attack|special|species|profession)-/, '')
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (l) => l.toUpperCase());
+};
+const traitDisplayName = formatTraitValue(traitValue);
+const traitTypeCapitalized = traitType
+  ? traitType.charAt(0).toUpperCase() + traitType.slice(1)
+  : '';
+const hasLore = traitNode?.optionsPayload?.body?.length > 0;
+const path = traitType === 'class' ? 'classes' : `${traitType}s`;
+
+const getImageUrl = (character: ResourceNode | null, variant = '') => {
+  if (!character?.collection) return '';
+  const categoryCapitalized =
+    character.collection.charAt(0).toUpperCase() +
+    character.collection.slice(1);
+  const tokenId = character.optionsPayload?.tokenId;
+  const variantSuffix = variant ? `_${variant}` : '';
+  return `${IMAGE_URL}Sneaky${categoryCapitalized}${variantSuffix}/Sneaky${categoryCapitalized}_${tokenId}_600px${variantSuffix}.webp`;
+};
+const getImageSrcSet = (character: ResourceNode | null, variant = '') => {
+  if (!character?.collection) return '';
+  const categoryCapitalized =
+    character.collection.charAt(0).toUpperCase() +
+    character.collection.slice(1);
+  const tokenId = character.optionsPayload?.tokenId;
+  const variantSuffix = variant ? `_${variant}` : '';
+  const baseUrl = `${IMAGE_URL}Sneaky${categoryCapitalized}${variantSuffix}/Sneaky${categoryCapitalized}_${tokenId}`;
+  return `${baseUrl}_600px${variantSuffix}.webp 600w, ${baseUrl}_1080px${variantSuffix}.webp 1080w, ${baseUrl}_1920px${variantSuffix}.webp 1920w`;
+};
+---
+
+<div data-trait-type={traitType} data-full-trait-slug={fullTraitSlug}>
+  <div class="relative overflow-hidden">
+    {
+      hasImage ? (
+        <div class="relative mx-auto max-w-5xl">
+          {useCustomImage ? (
+            <img
+              src={`${IMAGE_URL}${path}/${traitType}-${traitValue}_600px.webp`}
+              srcset={`${IMAGE_URL}${path}/${traitType}-${traitValue}_600px.webp 600w, ${IMAGE_URL}${path}/${traitType}-${traitValue}_1080px.webp 1080w, ${IMAGE_URL}${path}/${traitType}-${traitValue}_1920px.webp 1920w`}
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              alt={`${traitDisplayName} trait`}
+              class="h-auto w-full"
+            />
+          ) : (
+            <img
+              src={`${IMAGE_URL}${path}/${traitType}_600px.webp`}
+              srcset={`${IMAGE_URL}${path}/${traitType}_600px.webp 600w, ${IMAGE_URL}${path}/${traitType}_1080px.webp 1080w, ${IMAGE_URL}${path}/${traitType}_1920px.webp 1920w`}
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              alt={`${traitDisplayName} trait`}
+              class="h-auto w-full"
+            />
+          )}
+          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
+            <div class="px-4 py-6 md:px-8 md:py-8">
+              <h1 class="mb-2 text-3xl font-bold uppercase tracking-wide text-white md:text-4xl xl:text-5xl">
+                {traitTypeCapitalized} | {traitDisplayName}
+              </h1>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="relative" style={`min-height: 760px;`}>
+          <div class="relative z-10 mx-auto max-w-md px-4 py-24 md:max-w-lg xl:max-w-2xl">
+            <div class="mb-8 text-center">
+              <h1 class="mb-2 text-4xl font-bold uppercase tracking-wide text-gray-900 xl:text-5xl">
+                {traitTypeCapitalized} | {traitDisplayName}
+              </h1>
+              {representativeCharacter && (
+                <div class="text-lg text-gray-600">
+                  <span>Such as {representativeCharacter.title}</span>
+                  <span class="mx-2">•</span>
+                  <span class="capitalize">
+                    {representativeCharacter.collection}
+                  </span>
+                  <span class="mx-2">•</span>
+                  <span>Rank #{representativeCharacter.rarityOrder}</span>
+                </div>
+              )}
+            </div>
+            {hasLore && (
+              <div class="mb-8 space-y-4">
+                {traitNode.optionsPayload.body.map((p: string) => (
+                  <p class="leading-relaxed text-gray-700">{p}</p>
+                ))}
+              </div>
+            )}
+          </div>
+          <div
+            class="pointer-events-none absolute top-0 z-0 hidden h-full w-full items-center md:flex"
+            style={`left: calc(50% + 150px); width: calc(50% - 150px);`}
+          >
+            {representativeCharacter && (
+              <img
+                src={getImageUrl(representativeCharacter, 'nobg')}
+                srcset={getImageSrcSet(representativeCharacter, 'nobg')}
+                sizes="50vw"
+                alt={`${traitDisplayName} representative`}
+                class="h-auto w-full max-w-xl object-contain"
+                style={`max-height: 80vh;`}
+              />
+            )}
+          </div>
+        </div>
+      )
+    }
+
+    {
+      hasImage && (
+        <div class="mx-auto max-w-md px-4 py-8 md:max-w-lg md:py-12 xl:max-w-2xl">
+          {hasLore ? (
+            <div class="space-y-4">
+              {traitNode.optionsPayload.body.map((p: string) => (
+                <p class="text-lg leading-relaxed text-gray-700">{p}</p>
+              ))}
+            </div>
+          ) : (
+            <p class="text-lg italic text-gray-500">Lore coming soon</p>
+          )}
+        </div>
+      )
+    }
+  </div>
+
+  <div class="p-6">
+    <div class="flex flex-col gap-8 md:flex-row">
+      <aside class="w-full md:w-auto md:flex-shrink-0">
+        <div class="space-y-12">
+          <div data-collections-wrapper>
+            <CollectionsListbox client:load />
+          </div>
+          <div data-traits-explorer-wrapper>
+            <TraitsExplorer
+              lockedTrait={traitType}
+              traitValue={slug}
+              client:load
+            />
+          </div>
+        </div>
+      </aside>
+      <main class="min-w-0 flex-1">
+        <CharacterGrid lockedTrait={traitType} />
+      </main>
+    </div>
+  </div>
+</div>
+
+<style>
+  @media (min-width: 801px) {
+    [data-collections-wrapper] {
+      min-height: 160px;
+    }
+    [data-traits-explorer-wrapper] {
+      min-height: 500px;
+    }
+  }
+</style>

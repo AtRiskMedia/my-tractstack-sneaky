@@ -1,0 +1,81 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import StoryKeepDashboard from '@/components/storykeep/Dashboard';
+import StoryKeepDashboard_Analytics from '@/components/storykeep/Dashboard_Analytics';
+import { requireAdminOrEditor, isAuthenticated, isAdmin } from '@/utils/auth';
+import { getFullContentMap } from '@/stores/analytics';
+import { getBrandConfig } from '@/utils/api/brandConfig';
+import { preHealthCheck } from '@/utils/backend';
+
+const tenantId =
+  Astro.locals.tenant?.id || import.meta.env.PUBLIC_TENANTID || 'default';
+
+const healthCheckRedirect = await preHealthCheck(tenantId);
+if (healthCheckRedirect !== undefined) {
+  return healthCheckRedirect;
+}
+
+const authCheck = requireAdminOrEditor(Astro);
+if (authCheck) {
+  return authCheck;
+}
+const userIsAuthenticated = isAuthenticated(Astro);
+const userIsAdmin = isAdmin(Astro);
+const role = userIsAdmin ? `admin` : userIsAuthenticated ? `editor` : null;
+
+const brandConfig = await getBrandConfig(
+  Astro.locals.tenant?.id || import.meta.env.PUBLIC_TENANTID || 'default'
+);
+const initializing = !brandConfig.SITE_INIT;
+
+// Redirect to branding page during initial setup
+if (initializing) {
+  return Astro.redirect('/storykeep/branding');
+}
+
+const title = 'Analytics | StoryKeep';
+
+let fullContentMap;
+let homeSlug = 'hello';
+
+try {
+  fullContentMap = await getFullContentMap(
+    Astro.locals.tenant?.id || import.meta.env.PUBLIC_TENANTID || 'default'
+  );
+  homeSlug = fullContentMap.find((item) => item.isHome)?.slug || 'hello';
+} catch (error) {
+  return Astro.redirect(
+    `/maint?from=${encodeURIComponent(Astro.url.pathname)}`
+  );
+}
+---
+
+<Layout title={title} isStoryKeep={true} slug="storykeep">
+  <main id="main-content" class="min-h-screen w-full">
+    <div class="max-w-5xl p-3.5 md:p-8">
+      <StoryKeepDashboard
+        client:only="react"
+        fullContentMap={fullContentMap}
+        homeSlug={homeSlug}
+        activeTab="analytics"
+        role={role}
+        initializing={initializing}
+      />
+
+      <!-- Only show Analytics content when home page has title -->
+      {
+        fullContentMap.find((item) => item.slug === homeSlug)?.title?.trim() ? (
+          <StoryKeepDashboard_Analytics
+            client:only="react"
+            fullContentMap={fullContentMap}
+            initializing={initializing}
+          />
+        ) : (
+          <div class="mt-8 text-gray-500">
+            <p>Complete the setup wizard above to unlock Analytics.</p>
+          </div>
+        )
+      }
+    </div>
+  </main>
+</Layout>

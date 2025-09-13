@@ -1,24 +1,42 @@
-# build output
+# Build output
 dist/
-# generated types
-.astro/
+*.tgz
+#*.d.ts
 
-# dependencies
+# Dependencies
 node_modules/
 
-# logs
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# environment variables
-.env
-.env.production
+# Coverage directory used by tools like istanbul
+coverage/
 
-# macOS-specific files
-.DS_Store
-
-# jetbrains setting folder
-.idea/
+# Temporary folders
+tmp/
+temp/

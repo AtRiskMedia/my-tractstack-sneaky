@@ -1,0 +1,98 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { ProfileSwitch } from '@/components/profile/ProfileSwitch';
+import { ProfileConsent } from '@/components/profile/ProfileConsent';
+import { preHealthCheck } from '@/utils/backend';
+
+const tenantId =
+  Astro.locals.tenant?.id || import.meta.env.PUBLIC_TENANTID || 'default';
+
+const healthCheckRedirect = await preHealthCheck(tenantId);
+if (healthCheckRedirect !== undefined) {
+  return healthCheckRedirect;
+}
+
+const config = {
+  title: 'Configure your Session',
+  description: 'Manage your TractStack profile and session preferences',
+};
+---
+
+<Layout
+  title={config.title}
+  slug="profile"
+  isContext={false}
+  isStoryKeep={true}
+  isEditable={false}
+>
+  <main id="main-content">
+    <div class="px-6 py-24 font-sans text-xl">
+      <div class="mx-auto max-w-3xl">
+        <div class="space-y-6">
+          <p class="text-black">
+            This website has been "pressed" with Tract Stack. As you read and
+            click around it will open up like a choose-your-own adventure book.
+          </p>
+          <p class="text-black">
+            Without your consent, no personal information will be collected from
+            your device.
+          </p>
+
+          <h3 class="inline-flex items-center pt-12 text-xl text-gray-700">
+            Allow Tract Stack to retain memory of your session and preferences
+            <span
+              class="pl-2 text-gray-400"
+              title="We will use a few kilobytes of localStorage in your browser."
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </span>
+          </h3>
+
+          <!-- Consent Toggle using Ark UI -->
+          <div class="py-4">
+            <ProfileConsent client:load />
+          </div>
+
+          <!-- Profile Switch Component -->
+          <div class="pt-6">
+            <ProfileSwitch client:load />
+          </div>
+
+          <div class="pt-8 text-sm text-gray-600">
+            <p class="pb-4">
+              By enabling session memory, Tract Stack can provide a personalized
+              reading experience. This includes:
+            </p>
+            <ul class="space-y-2 pl-6 text-base">
+              <li class="list-disc">
+                Remembering your reading progress and preferences
+              </li>
+              <li class="list-disc">
+                Showing content tailored to your interests
+              </li>
+              <li class="list-disc">Maintaining your session across visits</li>
+            </ul>
+            <p class="pt-4 text-xs">
+              All data is stored locally in your browser. No personal
+              information is transmitted to external servers without your
+              explicit consent.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

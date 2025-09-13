@@ -1,5 +1,17 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] },
+    "types": [
+      "astro/client",
+      "@astrojs/react",
+      "node",
+      "@types/react",
+      "@types/react-dom",
+      "@types/tinycolor2"
+    ]
+  },
+  "include": ["src/**/*", "public/**/*", "tailwind.config.cjs"],
+  "exclude": ["node_modules", "dist", ".astro"]
 }

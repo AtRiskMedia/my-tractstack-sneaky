@@ -1,0 +1,589 @@
+---
+import type { ExtendedResourceNode as ResourceNode } from '../types';
+
+export interface Props {
+  route: string;
+  slug: string;
+  resources: Record<string, ResourceNode[]>;
+}
+
+const { route, slug, resources } = Astro.props;
+
+const targetSlug = `${route}-${slug}`;
+const activeResource = resources[route]?.find(
+  (resource: ResourceNode) => resource.slug === targetSlug
+);
+
+if (!activeResource) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Character not found',
+  });
+}
+
+const categoryCapitalized = route.charAt(0).toUpperCase() + route.slice(1);
+const tokenId = activeResource.optionsPayload?.tokenId;
+const rarityOrder = activeResource.optionsPayload?.rarityOrder;
+
+const IMAGE_URL = '/media/custom/';
+
+const getImageUrl = (variant = '') => {
+  const variantSuffix = variant ? `_${variant}` : '';
+  return `${IMAGE_URL}Sneaky${categoryCapitalized}${variantSuffix}/Sneaky${categoryCapitalized}_${tokenId}_600px${variantSuffix}.webp`;
+};
+
+const getImageSrcSet = (variant = '') => {
+  const variantSuffix = variant ? `_${variant}` : '';
+  const baseUrl = `${IMAGE_URL}Sneaky${categoryCapitalized}${variantSuffix}/Sneaky${categoryCapitalized}_${tokenId}`;
+  return `${baseUrl}_600px${variantSuffix}.webp 600w, ${baseUrl}_1080px${variantSuffix}.webp 1080w, ${baseUrl}_1920px${variantSuffix}.webp 1920w`;
+};
+
+const getStargazeUrl = () => {
+  const baseUrl = 'https://www.stargaze.zone/m/';
+  switch (route) {
+    case 'animals':
+      return `${baseUrl}sneaky/${tokenId}`;
+    case 'people':
+      return `${baseUrl}sneakypeople/${tokenId}`;
+    case 'stuff':
+      return `${baseUrl}stars1luw5em4jmprng78v2jrzp7p66lzetugdvvq38d9t0gylsut23dpqe686z3/${tokenId}`;
+    default:
+      return '#';
+  }
+};
+
+const slugifyTraitValue = (value: string) => {
+  return value.replace(/^(class|attack|special|species|profession)-/, '');
+};
+
+const formatTraitValue = (value: string) => {
+  return value
+    .replace(/^(class|attack|special|species|profession)-/, '')
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (l) => l.toUpperCase());
+};
+
+const payload = activeResource.optionsPayload || {};
+const hasLore =
+  payload.body && Array.isArray(payload.body) && payload.body.length > 0;
+---
+
+<div class="relative min-h-screen overflow-hidden">
+  <!-- Mobile Layout -->
+  <div class="block md:hidden">
+    <div class="mx-auto max-w-md px-4 py-8">
+      <!-- Header -->
+      <div class="mb-8 text-center">
+        <h1
+          class="mb-2 text-3xl font-bold uppercase tracking-wide text-gray-900"
+        >
+          {activeResource.title}
+        </h1>
+        <div class="text-gray-600">
+          <span class="capitalize">Sneaky {route}</span>
+          {
+            tokenId && rarityOrder && (
+              <>
+                <span class="mx-2">•</span>
+                <span>#{tokenId}</span>
+                <span class="mx-2">•</span>
+                <span>Rarity Rank {rarityOrder}</span>
+              </>
+            )
+          }
+        </div>
+      </div>
+
+      <!-- Image -->
+      <div class="mb-8 text-center">
+        <img
+          src={getImageUrl('nobg')}
+          srcset={getImageSrcSet('nobg')}
+          sizes="300px"
+          alt={activeResource.title}
+          class="mx-auto h-auto w-80 object-contain"
+        />
+      </div>
+
+      <!-- Lore -->
+      <div class="mb-8">
+        {
+          hasLore ? (
+            <div class="space-y-4">
+              {payload.body.map((paragraph: string, index: number) => (
+                <p key={index} class="leading-relaxed text-gray-700">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          ) : (
+            <p class="italic text-gray-500">Lore coming soon</p>
+          )
+        }
+      </div>
+
+      <!-- Traits -->
+      <div class="mb-8">
+        <h2
+          class="mb-4 text-xl font-bold uppercase tracking-wide text-gray-900"
+        >
+          TRAITS
+        </h2>
+        <div class="grid grid-cols-2 gap-3">
+          {
+            payload.attack && (
+              <div class="rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/attack.svg`}
+                    alt="Attack"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Attack
+                  </div>
+                </div>
+                <div class="text-lg font-bold">
+                  {formatTraitValue(payload.attack)}
+                </div>
+                <a
+                  class="text-xs underline hover:text-myblue"
+                  title="About this Attack"
+                  href={`/attack/${slugifyTraitValue(payload.attack)}`}
+                >
+                  (About this Attack)
+                </a>
+              </div>
+            )
+          }
+          {
+            payload.class && (
+              <div class="rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/class.svg`}
+                    alt="Class"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Class
+                  </div>
+                </div>
+                <div class="text-lg font-bold">
+                  {formatTraitValue(payload.class)}
+                </div>
+                <a
+                  class="text-xs underline hover:text-myblue"
+                  title="About this Class"
+                  href={`/class/${slugifyTraitValue(payload.class)}`}
+                >
+                  (About this Class)
+                </a>
+              </div>
+            )
+          }
+          {
+            typeof payload.sneakiness === 'number' && (
+              <div class="rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/sneakiness.svg`}
+                    alt="Sneakiness"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Sneakiness
+                  </div>
+                </div>
+                <div class="text-lg font-bold">{payload.sneakiness}</div>
+              </div>
+            )
+          }
+          {
+            typeof payload.power === 'number' && (
+              <div class="rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/power.svg`}
+                    alt="Power"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Power
+                  </div>
+                </div>
+                <div class="text-lg font-bold">{payload.power}</div>
+              </div>
+            )
+          }
+          {
+            payload.special && payload.special !== 'special-none' && (
+              <div class="col-span-2 rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/special.svg`}
+                    alt="Special Attack"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Special Attack
+                  </div>
+                </div>
+                <div class="text-lg font-bold">
+                  {formatTraitValue(payload.special)}
+                </div>
+                <a
+                  class="text-xs underline hover:text-myblue"
+                  title="About this Special Attack"
+                  href={`/special/${slugifyTraitValue(payload.special)}`}
+                >
+                  (About this Special Attack)
+                </a>
+              </div>
+            )
+          }
+          {
+            payload.profession && (
+              <div class="col-span-2 rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/profession.svg`}
+                    alt="Profession"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Profession
+                  </div>
+                </div>
+                <div class="text-lg font-bold">
+                  {formatTraitValue(payload.profession)}
+                </div>
+                <a
+                  class="text-xs underline hover:text-myblue"
+                  title="About this Profession"
+                  href={`/profession/${slugifyTraitValue(payload.profession)}`}
+                >
+                  (About this Profession)
+                </a>
+              </div>
+            )
+          }
+          {
+            payload.species && (
+              <div class="col-span-2 rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/species.svg`}
+                    alt="Species"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Species
+                  </div>
+                </div>
+                <div class="text-lg font-bold">
+                  {formatTraitValue(payload.species)}
+                </div>
+                <a
+                  class="text-xs underline hover:text-myblue"
+                  title="About this species"
+                  href={`/species/${slugifyTraitValue(payload.species)}`}
+                >
+                  (About this Species)
+                </a>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      <!-- Stargaze Button -->
+      <div class="mb-8 flex items-center justify-center">
+        <a
+          href={getStargazeUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="z-10 whitespace-nowrap rounded bg-brand-5 px-3.5 py-1.5 text-lg text-white shadow-sm transition-colors hover:bg-black hover:text-white focus:bg-brand-7 focus:text-white"
+        >
+          View NFT on Stargaze
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Layout -->
+  <div class="hidden md:block">
+    <!-- Bleeding Image - MD breakpoint -->
+    <div
+      class="pointer-events-none absolute top-0 z-0 xl:hidden"
+      style={{
+        left: 'calc(50vw + 256px + 2rem - 102px)', // md: overlap by ~20% of 512px content width
+        width: 'calc(50vw - 256px - 2rem + 102px + 10vw)', // original width + overlap + bleed
+        height: '100vh',
+      }}
+    >
+      <div class="flex h-full items-center">
+        <img
+          src={getImageUrl('nobg')}
+          srcset={getImageSrcSet('nobg')}
+          sizes="500px"
+          alt={activeResource.title}
+          class="h-auto w-full object-contain"
+          style={{ maxHeight: '80vh' }}
+        />
+      </div>
+    </div>
+
+    <!-- Bleeding Image - XL breakpoint -->
+    <div
+      class="pointer-events-none absolute top-0 z-0 hidden xl:block"
+      style={{
+        left: 'calc(50vw + 336px + 2rem - 134px)', // xl: overlap by ~20% of 672px content width
+        width: 'calc(50vw - 336px - 2rem + 134px + 10vw)', // original width + overlap + bleed
+        height: '100vh',
+      }}
+    >
+      <div class="flex h-full items-center">
+        <img
+          src={getImageUrl('nobg')}
+          srcset={getImageSrcSet('nobg')}
+          sizes="600px"
+          alt={activeResource.title}
+          class="h-auto w-full object-contain"
+          style={{ maxHeight: '80vh' }}
+        />
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div
+      class="relative z-10 mx-auto max-w-md px-4 py-8 md:max-w-lg xl:max-w-2xl"
+    >
+      <!-- Header -->
+      <div class="mb-8 text-center">
+        <h1
+          class="mb-2 text-4xl font-bold uppercase tracking-wide text-gray-900 xl:text-5xl"
+        >
+          {activeResource.title}
+        </h1>
+        <div class="text-lg text-gray-600">
+          <span class="capitalize">Sneaky {route}</span>
+          {
+            tokenId && rarityOrder && (
+              <>
+                <span class="mx-2">•</span>
+                <span>#{tokenId}</span>
+                <span class="mx-2">•</span>
+                <span>Rarity Rank {rarityOrder}</span>
+              </>
+            )
+          }
+        </div>
+      </div>
+
+      <!-- Lore -->
+      <div class="mb-8">
+        {
+          hasLore ? (
+            <div class="space-y-4">
+              {payload.body.map((paragraph: string, index: number) => (
+                <p key={index} class="text-lg leading-relaxed text-gray-700">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          ) : (
+            <p class="text-lg italic text-gray-500">Lore coming soon</p>
+          )
+        }
+      </div>
+
+      <!-- Traits -->
+      <div class="mb-8">
+        <h2
+          class="mb-4 text-xl font-bold uppercase tracking-wide text-gray-900"
+        >
+          TRAITS
+        </h2>
+        <div class="grid grid-cols-2 gap-3">
+          {
+            payload.attack && (
+              <div class="rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/attack.svg`}
+                    alt="Attack"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Attack
+                  </div>
+                </div>
+                <div class="text-lg font-bold">
+                  {formatTraitValue(payload.attack)}
+                </div>
+                <a
+                  class="text-xs underline hover:text-myblue"
+                  title="About this Attack"
+                  href={`/attack/${slugifyTraitValue(payload.attack)}`}
+                >
+                  (About this Attack)
+                </a>
+              </div>
+            )
+          }
+          {
+            payload.class && (
+              <div class="rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/class.svg`}
+                    alt="Class"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Class
+                  </div>
+                </div>
+                <div class="text-lg font-bold">
+                  {formatTraitValue(payload.class)}
+                </div>
+                <a
+                  class="text-xs underline hover:text-myblue"
+                  title="About this Class"
+                  href={`/class/${slugifyTraitValue(payload.class)}`}
+                >
+                  (About this Class)
+                </a>
+              </div>
+            )
+          }
+          {
+            typeof payload.sneakiness === 'number' && (
+              <div class="rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/sneakiness.svg`}
+                    alt="Sneakiness"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Sneakiness
+                  </div>
+                </div>
+                <div class="text-lg font-bold">{payload.sneakiness}</div>
+              </div>
+            )
+          }
+          {
+            typeof payload.power === 'number' && (
+              <div class="rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/power.svg`}
+                    alt="Power"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Power
+                  </div>
+                </div>
+                <div class="text-lg font-bold">{payload.power}</div>
+              </div>
+            )
+          }
+          {
+            payload.special && payload.special !== 'special-none' && (
+              <div class="col-span-2 rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/special.svg`}
+                    alt="Special Attack"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Special Attack
+                  </div>
+                </div>
+                <div class="text-lg font-bold">
+                  {formatTraitValue(payload.special)}
+                </div>
+                <a
+                  class="text-xs underline hover:text-myblue"
+                  title="About this Special Attack"
+                  href={`/special/${slugifyTraitValue(payload.special)}`}
+                >
+                  (About this Special Attack)
+                </a>
+              </div>
+            )
+          }
+          {
+            payload.profession && (
+              <div class="col-span-2 rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/profession.svg`}
+                    alt="Profession"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Profession
+                  </div>
+                </div>
+                <div class="text-lg font-bold">
+                  {formatTraitValue(payload.profession)}
+                </div>
+                <a
+                  class="text-xs underline hover:text-myblue"
+                  title="About this Profession"
+                  href={`/profession/${slugifyTraitValue(payload.profession)}`}
+                >
+                  (About this Profession)
+                </a>
+              </div>
+            )
+          }
+          {
+            payload.species && (
+              <div class="col-span-2 rounded-full border-2 border-gray-900 bg-white px-4 py-3 text-center">
+                <div class="mb-1 flex items-center justify-center">
+                  <img
+                    src={`${IMAGE_URL}icons/species.svg`}
+                    alt="Species"
+                    class="mr-1 h-4 w-4"
+                  />
+                  <div class="text-xs font-bold uppercase tracking-wide text-gray-500">
+                    Species
+                  </div>
+                </div>
+                <div class="text-lg font-bold">
+                  {formatTraitValue(payload.species)}
+                </div>
+                <a
+                  class="text-xs underline hover:text-myblue"
+                  title="About this species"
+                  href={`/species/${slugifyTraitValue(payload.species)}`}
+                >
+                  (About this Species)
+                </a>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      <!-- Stargaze Button -->
+      <div class="mb-8 flex items-center justify-center">
+        <a
+          href={getStargazeUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="z-10 whitespace-nowrap rounded bg-brand-5 px-3.5 py-1.5 text-lg text-white shadow-sm transition-colors hover:bg-black hover:text-white focus:bg-brand-7 focus:text-white"
+        >
+          View NFT on Stargaze
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

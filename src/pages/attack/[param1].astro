@@ -1,0 +1,71 @@
+---
+import CustomRoutes, { routes } from '@/custom/CustomRoutes.astro';
+import { preHealthCheck } from '@/utils/backend';
+import type { ResourceNode } from '@/types/compositorTypes';
+
+const tenantId =
+  Astro.locals.tenant?.id || import.meta.env.PUBLIC_TENANTID || 'default';
+
+const healthCheckRedirect = await preHealthCheck(tenantId);
+if (healthCheckRedirect !== undefined) {
+  return healthCheckRedirect;
+}
+
+const { param1 } = Astro.params;
+const route = `attack`;
+
+// Check if route is enabled
+if (!param1 || !routes[route]) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found',
+  });
+}
+
+const CATEGORIES = [
+  `class`,
+  `species`,
+  `profession`,
+  `attack`,
+  `special`,
+  `people`,
+  `animals`,
+  `stuff`,
+];
+
+let resources = [];
+const goBackend = import.meta.env.PUBLIC_GO_BACKEND || 'http://localhost:8080';
+
+try {
+  const resourcesResponse = await fetch(`${goBackend}/api/v1/nodes/resources`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Tenant-ID': tenantId },
+    body: JSON.stringify({ categories: CATEGORIES }),
+  });
+
+  if (resourcesResponse.ok) {
+    const responseData = await resourcesResponse.json();
+    if (responseData.resources) {
+      resources = responseData.resources;
+    }
+  }
+} catch (error) {
+  console.error('Error fetching resources:', error);
+  return new Response(null, {
+    status: 500,
+    statusText: 'Internal Server Error',
+  });
+}
+
+// Check if the specific resource exists
+const targetSlug = `${route}-${param1}`;
+
+if (!resources.length) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found',
+  });
+}
+---
+
+<CustomRoutes route={route} slug={param1} resources={resources} />

@@ -1,0 +1,54 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { getBrandConfig } from '@/utils/api/brandConfig';
+import CharacterHero from '@/custom/components/CharacterHero.astro';
+import type { MenuNode } from '@/types/tractstack';
+import type { ResourceNode } from '@/types/compositorTypes';
+
+export interface Props {
+  route: string;
+  slug: string;
+  variation?: string;
+  resources: Record<string, ResourceNode[]>;
+}
+
+const { route, slug, resources } = Astro.props;
+
+const brandConfig = await getBrandConfig(`default`);
+
+let menuPayload: MenuNode | null = null;
+const hardcodedMenuId = '01JXXTQEAV6F1H7Z0VX6HB0379';
+const goBackend = import.meta.env.PUBLIC_GO_BACKEND || 'http://localhost:8080';
+try {
+  const menuResponse = await fetch(
+    `${goBackend}/api/v1/nodes/menus/${hardcodedMenuId}`
+  );
+  if (menuResponse.ok) {
+    menuPayload = await menuResponse.json();
+  }
+} catch (error) {
+  console.error('Error fetching menu:', error);
+}
+
+const targetSlug = `${route}-${slug}`;
+const activeResource = resources[route].find(
+  (resource: any) => resource.slug === targetSlug
+);
+
+const pageTitle = `${route}=${slug}`;
+---
+
+<Layout id={`${route}-collections-page`} title={pageTitle}>
+  <main id="main-content" class="w-full">
+    {
+      slug ? (
+        <div class="pane" id={`pane-${route}-${slug}`}>
+          <CharacterHero route={route} slug={slug} resources={resources} />
+        </div>
+      ) : null
+    }
+  </main>
+  <script src="/client/sneaky-main.js" is:persist></script>
+</Layout>

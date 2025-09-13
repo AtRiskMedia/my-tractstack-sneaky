@@ -1,0 +1,68 @@
+---
+import Animals from '@/custom/pages/Animals.astro';
+import Attack from '@/custom/pages/Attack.astro';
+import Class from '@/custom/pages/Class.astro';
+import People from '@/custom/pages/People.astro';
+import Profession from '@/custom/pages/Profession.astro';
+import Special from '@/custom/pages/Special.astro';
+import Species from '@/custom/pages/Species.astro';
+import Stuff from '@/custom/pages/Stuff.astro';
+import { extractResources } from '@/custom/utils/extractResources';
+import type { ResourceNode } from '@/types/compositorTypes';
+
+export interface Props {
+  route: string;
+  slug: string;
+  resources: ResourceNode[];
+  variation?: string;
+}
+
+const { route, slug, resources } = Astro.props;
+
+export const routes = {
+  animals: true,
+  attack: true,
+  class: true,
+  people: true,
+  profession: true,
+  special: true,
+  species: true,
+  stuff: true,
+};
+
+const payload = extractResources(resources);
+---
+
+{
+  route === 'animals' ? (
+    <Animals route={route} slug={slug} resources={payload} />
+  ) : route === 'attack' ? (
+    <Attack route={route} slug={slug} resources={payload} />
+  ) : route === 'class' ? (
+    <Class route={route} slug={slug} resources={payload} />
+  ) : route === 'people' ? (
+    <People route={route} slug={slug} resources={payload} />
+  ) : route === 'profession' ? (
+    <Profession route={route} slug={slug} resources={payload} />
+  ) : route === 'special' ? (
+    <Special route={route} slug={slug} resources={payload} />
+  ) : route === 'species' ? (
+    <Species route={route} slug={slug} resources={payload} />
+  ) : route === 'stuff' ? (
+    <Stuff route={route} slug={slug} resources={payload} />
+  ) : (
+    <div class="rounded-lg bg-gray-50 p-8 text-center">
+      <p class="text-gray-600">Custom route "{route}" not found</p>
+      <p class="mt-2 text-sm text-gray-500">
+        Available routes: animals, attack, class, people, profession, special,
+        species, stuff
+      </p>
+      <div class="mt-4 rounded border bg-white p-4 text-left text-xs">
+        <p class="mb-2 font-bold">Route Data:</p>
+        <p>Route: {route}</p>
+        <p>Slug: {slug}</p>
+        <p>Resources: {resources.length} items</p>
+      </div>
+    </div>
+  )
+}

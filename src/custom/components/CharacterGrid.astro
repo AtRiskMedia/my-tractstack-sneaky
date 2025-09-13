@@ -1,0 +1,235 @@
+---
+import Pagination from './Pagination.tsx';
+import type { ResourceNode } from '@/types/compositorTypes';
+
+export interface Props {
+  lockedTrait?: string;
+}
+
+const { lockedTrait } = Astro.props;
+---
+
+<div class="space-y-6">
+  <div id="character-grid" data-locked-trait={lockedTrait}>
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold text-gray-900">Loading...</h2>
+      <div class="text-sm text-gray-500">Page 1 of 1</div>
+    </div>
+    <div class="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
+      <!-- First row of placeholder cards -->
+      <div class="group relative block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-24 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group relative block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-20 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Third card - only visible on md+ -->
+      <div class="group relative hidden md:block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-28 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fourth card - only visible on xl+ -->
+      <div class="group relative hidden xl:block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-32 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second row of placeholder cards -->
+      <div class="group relative block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-16 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group relative block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-24 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group relative hidden md:block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-20 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group relative hidden xl:block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-28 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Third row of placeholder cards -->
+      <div class="group relative block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-32 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group relative block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-16 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group relative hidden md:block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-24 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group relative hidden xl:block">
+        <div
+          class="relative z-10 mx-4 mb-6 aspect-square overflow-hidden rounded-2xl border-2 border-brand-7 bg-gradient-to-br from-amber-50 to-amber-100 shadow-lg"
+        >
+          <div class="h-full w-full animate-pulse bg-gray-200"></div>
+        </div>
+        <div
+          class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <div class="h-4 w-20 animate-pulse rounded bg-gray-300"></div>
+            <div class="h-4 w-8 animate-pulse rounded bg-gray-300"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    data-pagination-wrapper
+    class="mt-8 flex justify-center"
+    style={{ minHeight: '40px', visibility: 'hidden' }}
+  >
+    <Pagination client:load />
+  </div>
+</div>
+
+<script>
+  import { initializeGrid } from '../scripts/grid-updater';
+
+  const gridElement = document.getElementById('character-grid') as HTMLElement;
+
+  if (gridElement) {
+    initializeGrid();
+  }
+</script>

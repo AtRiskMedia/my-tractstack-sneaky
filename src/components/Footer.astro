@@ -1,0 +1,250 @@
+---
+import { lispLexer } from '@/utils/actions/lispLexer';
+import { preParseAction } from '@/utils/actions/preParse_Action';
+import type { MenuNode } from '@/types/tractstack';
+
+export interface Props {
+  slug: string;
+  brandConfig: any;
+  isContext?: boolean;
+  menu?: MenuNode | null;
+  backToTop?: boolean;
+  created?: string;
+}
+
+const {
+  slug,
+  brandConfig,
+  isContext = false,
+  menu,
+  backToTop = false,
+  created,
+} = Astro.props;
+
+const footer = brandConfig?.FOOTER || ``;
+const socials =
+  typeof brandConfig?.SOCIALS === 'string' ? brandConfig.SOCIALS : '';
+
+// Process menu links for footer
+let allLinks: any[] = [];
+if (menu?.optionsPayload) {
+  const additionalLinks = menu.optionsPayload
+    .filter((e: any) => !e.featured)
+    .map((e: any) => {
+      const item = { ...e };
+      const thisPayload = lispLexer(e.actionLisp);
+      const to = preParseAction(thisPayload, slug, isContext, brandConfig);
+      if (typeof to === `string`) {
+        item.to = to;
+        item.internal = true;
+      } else if (typeof to === `object`) {
+        item.to = to[0];
+      }
+      return item;
+    });
+
+  const featuredLinks = menu.optionsPayload
+    .filter((e: any) => e.featured)
+    .map((e: any) => {
+      const item = { ...e };
+      const thisPayload = lispLexer(e.actionLisp);
+      const to = preParseAction(thisPayload, slug, isContext, brandConfig);
+      if (typeof to === `string`) {
+        item.to = to;
+        item.internal = true;
+      } else if (typeof to === `object`) {
+        item.to = to[0];
+      }
+      return item;
+    });
+
+  allLinks = additionalLinks.concat(featuredLinks);
+}
+
+// Parse socials string
+function isSocialEntry(
+  arr: string[]
+): arr is [string, string] | [string, string, string] {
+  return arr.length >= 2 && arr.length <= 3;
+}
+
+const socialIconKeys = [
+  `github`,
+  `facebook`,
+  `instagram`,
+  `linkedin`,
+  `mail`,
+  `twitter`,
+  `x`,
+  `twitch`,
+  `youtube`,
+  `tiktok`,
+  `codepen`,
+  `discord`,
+  `rumble`,
+];
+
+const socialLinks = socials
+  .split(`,`)
+  .map((s: string) => s.split(`|`))
+  .filter(isSocialEntry);
+
+// Get creation year for copyright
+const createdDate = created ? new Date(created) : new Date();
+---
+
+<div class="h-6 w-full bg-gradient-to-b from-transparent to-white md:h-8"></div>
+<footer class="w-full bg-white">
+  <div class="flex justify-end px-6">
+    {backToTop && <div id="back-to-top-container" />}
+  </div>
+  <div class="pb-6">
+    {
+      allLinks.length > 0 ? (
+        <div class="mx-auto max-w-4xl px-4 py-12">
+          <nav class="flex flex-wrap justify-center gap-4">
+            {allLinks.map((item: any) => (
+              <a
+                href={item.to}
+                class={
+                  'z-10 whitespace-nowrap rounded px-3.5 py-1.5 text-lg shadow-sm transition-colors ' +
+                  (item.featured
+                    ? 'bg-brand-7 hover:bg-myblack focus:bg-brand-7 text-white hover:text-white focus:text-white'
+                    : 'text-brand-7 hover:bg-myblack focus:bg-brand-7 bg-white hover:text-white focus:text-white')
+                }
+                title={item.description}
+              >
+                <span class="font-bold">{item.name}</span>
+              </a>
+            ))}
+          </nav>
+        </div>
+      ) : null
+    }
+
+    {/* Socials */}
+    {
+      socialLinks.length > 0 ? (
+        <div class="flex flex-wrap justify-center gap-3">
+          {socialLinks
+            .filter((social: string[]) => socialIconKeys.includes(social[0]))
+            .map((social: string[]) => (
+              <a
+                href={social[1]}
+                class="hover:text-myblue group my-1 inline-block p-2 hover:rotate-6"
+                target="_blank"
+                title={social[2] ?? social[1]}
+              >
+                <span>
+                  <img
+                    src={`/socials/${social[0]}.svg`}
+                    alt={`${social[0]} icon`}
+                    class="inline-block h-6 w-6 scale-125"
+                    width="24"
+                    height="24"
+                  />
+                </span>
+              </a>
+            ))}
+        </div>
+      ) : null
+    }
+
+    <div
+      class="text-myblue xs:flex-row my-2 flex flex-col items-center justify-center"
+    >
+      <div class="px-12 text-center text-2xl">
+        Copyright &#169; {createdDate.getFullYear()}{
+          createdDate.getFullYear() !== new Date().getFullYear()
+            ? `-${new Date().getFullYear()}`
+            : ''
+        }
+        &nbsp;|&nbsp;
+        {footer}
+      </div>
+    </div>
+    <div
+      class="text-myblue xs:flex-row my-2 flex flex-col items-center justify-center"
+    >
+      <div class="px-12 text-center text-lg">
+        pressed with
+        <a
+          href="https://tractstack.com/?utm_source=tractstack&utm_medium=www&utm_campaign=community"
+          class="font-bold underline hover:text-black"
+          target="_blank"
+          title="Tract Stack by At Risk Media"
+        >
+          Tract Stack</a
+        >
+        &ndash; the &#8220;free web press&#8221; by{` `}
+        <a
+          href="https://atriskmedia.com/?utm_source=tractstack&utm_medium=www&utm_campaign=community"
+          class="font-bold underline hover:text-black"
+          target="_blank">At Risk Media</a
+        >
+      </div>
+      <br /><br /><br />
+    </div>
+  </div>
+</footer>
+
+<script>
+  function createBackToTopButton() {
+    const container = document.getElementById('back-to-top-container');
+    if (!container) return;
+
+    let isVisible = false;
+    let ticking = false;
+
+    function toggleButton() {
+      const shouldShow = window.scrollY > 100;
+
+      if (shouldShow && !isVisible) {
+        isVisible = true;
+        if (container?.innerHTML)
+          container.innerHTML = `
+          <button
+            id="top"
+            title="Back to top"
+            class="motion-safe:animate-fadeInUp font-action border-mydarkgrey/20 fixed bottom-4 rounded-md border-2 px-1.5 text-2xl font-bold text-black hover:border-black hover:rotate-2"
+            style="right:max(8px, calc(8px + env(safe-area-inset-right)));background:rgba(255, 255, 255, 0.8);backdrop-filter:blur(4px);z-index:10007"
+          >
+            ↑
+          </button>
+        `;
+
+        const topButton = document.getElementById('top');
+        if (topButton) {
+          topButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+          });
+        }
+      } else if (!shouldShow && isVisible) {
+        isVisible = false;
+        if (container?.innerHTML) container.innerHTML = '';
+      }
+    }
+
+    function requestTick() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          toggleButton();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    toggleButton();
+    window.addEventListener('scroll', requestTick, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', createBackToTopButton);
+  } else {
+    createBackToTopButton();
+  }
+</script>

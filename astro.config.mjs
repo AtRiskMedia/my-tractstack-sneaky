@@ -1,5 +1,18 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import node from '@astrojs/node';
+import tractstack from 'astro-tractstack';
 
-// https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  integrations: [
+    react(),
+    tractstack({
+      includeExamples: false,
+      enableMultiTenant: false,
+    }),
+  ],
+  output: 'server',
+  adapter: node({
+    mode: 'standalone',
+  }),
+});

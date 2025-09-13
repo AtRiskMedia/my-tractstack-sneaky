@@ -1,0 +1,65 @@
+---
+import FeaturedContent from '@/components/codehooks/FeaturedContent.astro';
+import ListContent from '@/components/codehooks/ListContent.astro';
+import BunnyVideoWrapper from '@/components/codehooks/BunnyVideoWrapper.astro';
+import EpinetWrapper from '@/components/codehooks/EpinetWrapper';
+import SneakyHome from '@/custom/SneakyHome.astro';
+import CollectionHero from '@/custom/components/CollectionHero.astro';
+import CharacterGrid from '@/custom/components/CharacterGrid.astro';
+import type { FullContentMapItem } from '@/types/tractstack';
+import type { ResourceNode } from '@/types/compositorTypes';
+
+export interface Props {
+  target: string;
+  fullContentMap: FullContentMapItem[];
+  resourcesPayload?: Record<string, ResourceNode[]>;
+  options?: {
+    params?: {
+      options?: string;
+    };
+  };
+}
+
+const { target, options, fullContentMap /*, resourcesPayload = {} */ } =
+  Astro.props;
+
+export const components = {
+  'featured-content': true,
+  'list-content': true,
+  'bunny-video': true,
+  'character-grid': true,
+  'collection-hero': true,
+  'sneaky-home': true,
+  epinet: true,
+};
+---
+
+{
+  target === 'list-content' ? (
+    <ListContent options={options} contentMap={fullContentMap} />
+  ) : target === 'featured-content' ? (
+    <FeaturedContent options={options} contentMap={fullContentMap} />
+  ) : target === 'bunny-video' ? (
+    <BunnyVideoWrapper options={options} />
+  ) : target === 'epinet' ? (
+    <EpinetWrapper fullContentMap={fullContentMap} client:only="react" />
+  ) : target === 'character-grid' ? (
+    <CharacterGrid />
+  ) : target === 'collection-hero' ? (
+    (() => {
+      const parsedOptions = JSON.parse(
+        (options as any)?.params?.options || '{}'
+      );
+      const slug = parsedOptions?.collection || 'all';
+      return <CollectionHero slug={slug} />;
+    })()
+  ) : target === 'sneaky-home' ? (
+    <SneakyHome />
+  ) : (
+    <div class="rounded-lg bg-gray-50 p-8 text-center">
+      <p class="text-gray-600">CodeHook target "{target}" not found</p>
+    </div>
+  )
+}
+
+<script src="/client/sneaky-main.js" is:persist></script>

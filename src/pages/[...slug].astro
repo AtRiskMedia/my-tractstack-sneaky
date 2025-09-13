@@ -1,0 +1,155 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import CodeHook from '@/custom/CodeHook.astro';
+import { getBrandConfig } from '@/utils/api/brandConfig';
+import { handleFailedResponse } from '@/utils/backend';
+import { getFullContentMap } from '@/stores/analytics';
+import { getOrSetSessionId } from '@/lib/session';
+import { getStoryData } from '@/lib/storyData';
+import { preHealthCheck } from '@/utils/backend';
+
+const tenantId =
+  Astro.locals.tenant?.id || import.meta.env.PUBLIC_TENANTID || 'default';
+
+const healthCheckRedirect = await preHealthCheck(tenantId);
+if (healthCheckRedirect !== undefined) {
+  return healthCheckRedirect;
+}
+
+const { slug } = Astro.params || {};
+
+if (slug && (slug.startsWith('images/') || slug.startsWith('media/'))) {
+  return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+
+const lookup = slug || '';
+const sessionId = await getOrSetSessionId(Astro, tenantId);
+const goBackend = import.meta.env.PUBLIC_GO_BACKEND || 'http://localhost:8080';
+
+let storyData;
+try {
+  storyData = await getStoryData(Astro, lookup, sessionId, tenantId);
+} catch (error) {
+  if (error instanceof Response) {
+    return error;
+  }
+  console.error('Error fetching storyfragment:', error);
+  return Astro.redirect(
+    `/maint?from=${encodeURIComponent(Astro.url.pathname)}`
+  );
+}
+
+const storyfragmentId = storyData.id;
+const storyfragmentTitle = storyData.title || 'Untitled Story';
+const paneIds = storyData.paneIds || [];
+const codeHookTargets = storyData.codeHookTargets || {};
+const resourcesPayload = storyData.resourcesPayload || {};
+
+if (paneIds.length === 0) {
+  console.log(`Empty Story Fragment. Redirecting to /storykeep`);
+  return Astro.redirect('/storykeep');
+}
+
+let fragmentsData: Record<string, string> = {};
+try {
+  const batchResponse = await fetch(`${goBackend}/api/v1/fragments/panes`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Tenant-ID': tenantId,
+      'X-StoryFragment-ID': storyfragmentId,
+      'X-TractStack-Session-ID': sessionId,
+    },
+    body: JSON.stringify({ paneIds }),
+  });
+
+  if (batchResponse.ok) {
+    const batchData = await batchResponse.json();
+    fragmentsData = batchData.fragments || {};
+    if (batchData.errors) {
+      Object.entries(batchData.errors).forEach(([paneId, error]) => {
+        fragmentsData[paneId] =
+          `<div class="error">Failed to load pane ${paneId}: ${error}</div>`;
+      });
+    }
+  } else {
+    const failedFragmentsResponse = await handleFailedResponse(
+      batchResponse,
+      goBackend,
+      tenantId,
+      Astro.url.pathname
+    );
+    if (failedFragmentsResponse) {
+      return failedFragmentsResponse;
+    }
+  }
+} catch (error) {
+  console.error('Error fetching fragments:', error);
+  return Astro.redirect(
+    `/maint?from=${encodeURIComponent(Astro.url.pathname)}`
+  );
+}
+
+if (!fragmentsData) {
+  return Astro.redirect(
+    `/maint?from=${encodeURIComponent(Astro.url.pathname)}`
+  );
+}
+
+const fullContentMap = await getFullContentMap(tenantId);
+const brandConfig = await getBrandConfig(tenantId);
+
+if (!brandConfig.SITE_INIT) {
+  return Astro.redirect('/storykeep');
+}
+---
+
+<Layout
+  title={storyfragmentTitle}
+  slug={lookup || brandConfig.HOME_SLUG}
+  menu={storyData.menu || null}
+  created={storyData.created}
+  isContext={false}
+  isStoryKeep={false}
+  isEditable={true}
+  brandConfig={brandConfig}
+  sessionId={sessionId}
+  impressions={storyData.impressions || []}
+  storyfragmentId={storyfragmentId}
+>
+  <main id="main-content" class="w-full">
+    <div class="panes-container">
+      {
+        paneIds.map((paneId: string) => (
+          <div
+            id={`pane-${paneId}`}
+            data-pane-id={paneId}
+            class="pane-fragment-container"
+            hx-get={`/api/v1/fragments/panes/${paneId}`}
+            hx-trigger="refresh"
+            hx-swap="innerHTML"
+          >
+            {codeHookTargets[paneId] ? (
+              <div class="overflow-hidden">
+                <CodeHook
+                  target={codeHookTargets[paneId]}
+                  options={(() => {
+                    const optionsStr =
+                      codeHookTargets[paneId + '-' + codeHookTargets[paneId]];
+                    return optionsStr
+                      ? { params: { options: optionsStr } }
+                      : undefined;
+                  })()}
+                  fullContentMap={fullContentMap}
+                  resourcesPayload={resourcesPayload}
+                />
+              </div>
+            ) : (
+              <Fragment set:html={fragmentsData[paneId] || ''} />
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </main>
+</Layout>

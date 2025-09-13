@@ -1,0 +1,347 @@
+---
+// Sneaky Productions Home Component
+---
+
+<div class="container">
+  <div class="staggered-grid">
+    <div class="grid-row">
+      <div class="grid-item" id="sneakypedia">
+        <img
+          srcset="/custom/home/sneakypedia_600px.webp 600w, /custom/home/sneakypedia_1080px.webp 1080w"
+          sizes="(max-width: 800px) 50vw, 30vw"
+          src="/custom/home/sneakypedia_600px.webp"
+          alt="Sneakypedia"
+          loading="lazy"
+        />
+      </div>
+      <div class="grid-item" id="lore">
+        <img
+          srcset="/custom/home/lore_600px.webp 600w, /custom/home/lore_1080px.webp 1080w"
+          sizes="(max-width: 800px) 70vw, 42vw"
+          src="/custom/home/lore_600px.webp"
+          alt="Lore"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
+    <div class="grid-row">
+      <div class="grid-item" id="collections">
+        <img
+          srcset="/custom/home/collections_600px.webp 600w, /custom/home/collections_1080px.webp 1080w"
+          sizes="(max-width: 800px) 60vw, 36vw"
+          src="/custom/home/collections_600px.webp"
+          alt="Our Collections"
+          loading="lazy"
+        />
+      </div>
+      <div class="grid-item" id="sneakyfolio">
+        <img
+          srcset="/custom/home/sneakyfolio_600px.webp 600w, /custom/home/sneakyfolio_1080px.webp 1080w"
+          sizes="(max-width: 800px) 60vw, 36vw"
+          src="/custom/home/sneakyfolio_600px.webp"
+          alt="Sneakyfolio"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
+    <div class="grid-row">
+      <div class="grid-item" id="shop">
+        <img
+          srcset="/custom/home/shop_600px.webp 600w, /custom/home/shop_1080px.webp 1080w"
+          sizes="(max-width: 800px) 50vw, 30vw"
+          src="/custom/home/shop_600px.webp"
+          alt="Shop"
+          loading="lazy"
+        />
+      </div>
+      <div class="grid-item" id="cards">
+        <img
+          srcset="/custom/home/sneaky-cards_600px.webp 600w, /custom/home/sneaky-cards_1080px.webp 1080w"
+          sizes="(max-width: 800px) 65vw, 39vw"
+          src="/custom/home/sneaky-cards_600px.webp"
+          alt="Sneaky Cards"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
+    <div class="grid-row">
+      <div class="grid-item"></div>
+      <div class="grid-item" id="plushies">
+        <img
+          srcset="/custom/home/plushies_600px.webp 600w, /custom/home/plushies_1080px.webp 1080w"
+          sizes="(max-width: 800px) 60vw, 36vw"
+          src="/custom/home/plushies_600px.webp"
+          alt="Plushies"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .staggered-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 120px;
+    overflow: hidden;
+  }
+
+  .grid-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .grid-item {
+    width: 36%;
+  }
+  #lore.grid-item {
+    width: 42%;
+  }
+  #sneakypedia.grid-item {
+    width: 30%;
+  }
+  #cards.grid-item {
+    width: 39%;
+  }
+  #shop.grid-item {
+    width: 30%;
+  }
+
+  .grid-item img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .grid-item img:hover {
+    transform: scale(1.05) rotate(2deg);
+  }
+
+  .grid-row .grid-item:nth-child(1) {
+    margin-top: 200px;
+  }
+
+  /* --- DESKTOP DECORATIONS (NOW PROPORTIONAL) --- */
+
+  /* Row 1: loop1.webp between Sneakypedia and Lore */
+  .grid-row:nth-child(1)::before {
+    content: '';
+    position: absolute;
+    width: 45%;
+    height: 100%;
+    background: url('/custom/home/loop1_1080px.webp') no-repeat center;
+    background-size: contain;
+    left: 28%;
+    top: 10%;
+    z-index: -1;
+  }
+
+  /* Row 1: coins.webp flowing down from first row toward second row */
+  .grid-row:nth-child(1)::after {
+    content: '';
+    position: absolute;
+    width: 45%;
+    height: 225%;
+    background: url('/custom/home/coins_1080px.webp') no-repeat center;
+    background-size: contain;
+    left: 48%;
+    transform: translateX(-50%);
+    bottom: -140%;
+    z-index: -1;
+  }
+
+  /* Row 3: loop2.webp flowing from Sneakyfolio to Sneaky Cards */
+  .grid-row:nth-child(3)::before {
+    content: '';
+    position: absolute;
+    width: 65%;
+    height: 380%;
+    background: url('/custom/home/loop2_1080px.webp') no-repeat center;
+    background-size: contain;
+    right: 4%;
+    top: -205%;
+    z-index: -1;
+  }
+
+  /* Row 3: coins.webp between Shop and Sneaky Cards */
+  .grid-row:nth-child(3)::after {
+    content: '';
+    position: absolute;
+    width: 40%;
+    height: 250%;
+    background: url('/custom/home/coins_1080px.webp') no-repeat center;
+    background-size: contain;
+    left: 45%;
+    transform: translateX(-50%);
+    top: 0%;
+    z-index: -1;
+  }
+
+  @media (max-width: 800px) {
+    .staggered-grid {
+      gap: 320px;
+    }
+
+    .grid-row {
+      flex-direction: column;
+      align-items: center;
+      gap: 250px;
+    }
+
+    .grid-item {
+      width: 60%;
+    }
+    #lore.grid-item {
+      width: 70%;
+    }
+    #sneakypedia.grid-item {
+      width: 50%;
+    }
+    #cards.grid-item {
+      margin-top: 150px;
+      width: 65%;
+    }
+    #shop.grid-item {
+      width: 50%;
+    }
+    #plushies.grid-item {
+      margin-top: -150px;
+    }
+
+    .grid-row .grid-item:nth-child(1) {
+      margin-top: 0;
+    }
+
+    /* Hide ALL desktop pseudo-elements by default */
+    .grid-row::before,
+    .grid-row::after {
+      display: none;
+    }
+
+    /* --- Mobile-Specific Reordering & Decorations --- */
+
+    .grid-row:nth-child(1) .grid-item:nth-child(1) {
+      order: 2;
+    }
+
+    .grid-row:nth-child(1) .grid-item:nth-child(2) {
+      order: 1;
+    }
+
+    .grid-row:nth-child(2) .grid-item:nth-child(1) {
+      order: 2;
+    }
+
+    .grid-row:nth-child(2) .grid-item:nth-child(2) {
+      order: 1;
+    }
+
+    /* --- MOBILE DECORATIONS (NOW PROPORTIONAL) --- */
+
+    .grid-row:nth-child(1)::after {
+      display: block;
+      content: '';
+      position: absolute;
+      width: 70%;
+      height: 50%;
+      background: url('/custom/home/loop-vertical-1_600px.webp') no-repeat
+        center;
+      background-size: contain;
+      left: 40%;
+      top: 60%;
+      transform: translate(-35%, -50%);
+      z-index: -1;
+    }
+
+    .grid-row:nth-child(2)::before {
+      display: block;
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 70%;
+      background: url('/custom/home/coins_600px.webp') no-repeat center;
+      background-size: contain;
+      left: 50%;
+      top: -48%;
+      transform: translateX(-50%);
+      z-index: -1;
+    }
+
+    .grid-row:nth-child(2)::after {
+      display: block;
+      content: '';
+      position: absolute;
+      width: 25%;
+      height: 30%;
+      background: url('/custom/home/loop-vertical-2_600px.webp') no-repeat
+        center;
+      background-size: contain;
+      left: 45%;
+      top: 48%;
+      transform: translate(-35%, -50%);
+      z-index: -1;
+    }
+
+    .grid-row:nth-child(3)::before {
+      display: block;
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 70%;
+      background: url('/custom/home/coins_600px.webp') no-repeat center;
+      background-size: contain;
+      left: 50%;
+      top: -48%;
+      transform: translateX(-50%);
+      z-index: -1;
+    }
+
+    .grid-row:nth-child(3)::after {
+      display: block;
+      content: '';
+      position: absolute;
+      width: 40%;
+      height: 32%;
+      background: url('/custom/home/loop-vertical_600px.webp') no-repeat center;
+      background-size: contain;
+      left: 40%;
+      top: 45%;
+      transform: translate(-35%, -50%);
+      z-index: -1;
+    }
+
+    .grid-row:nth-child(4)::before {
+      display: block;
+      content: '';
+      position: absolute;
+      width: 60%;
+      height: 80%;
+      background: url('/custom/home/coins-reverse_600px.webp') no-repeat center;
+      background-size: contain;
+      left: 50%;
+      top: -60%;
+      transform: translateX(-50%);
+      z-index: -1;
+    }
+  }
+</style>

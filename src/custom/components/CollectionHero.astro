@@ -1,0 +1,48 @@
+---
+import CollectionsListbox from './CollectionsListbox.tsx';
+import TraitsExplorer from './TraitsExplorer.tsx';
+import CharacterGrid from './CharacterGrid.astro';
+import type { ResourceNode } from '@/types/compositorTypes';
+
+export interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<div class="min-h-screen p-6" data-slug={slug}>
+  <div class="flex flex-col gap-8 md:flex-row">
+    <aside class="w-full md:w-auto md:flex-shrink-0">
+      <div class="space-y-12">
+        {
+          slug === 'all' && (
+            <div data-collections-wrapper>
+              <CollectionsListbox client:load />
+            </div>
+          )
+        }
+        <div data-traits-explorer-wrapper>
+          <TraitsExplorer
+            lockedCollection={slug !== `all` ? slug : undefined}
+            client:load
+          />
+        </div>
+      </div>
+    </aside>
+    <main class="min-w-0 flex-1">
+      <CharacterGrid />
+    </main>
+  </div>
+</div>
+
+<style>
+  @media (min-width: 801px) {
+    [data-collections-wrapper] {
+      min-height: 160px;
+    }
+    [data-traits-explorer-wrapper] {
+      min-height: 500px;
+    }
+  }
+</style>

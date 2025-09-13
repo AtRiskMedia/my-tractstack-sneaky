@@ -1,0 +1,71 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import StoryKeepDashboard from '@/components/storykeep/Dashboard';
+import StoryKeepDashboard_Content from '@/components/storykeep/Dashboard_Content';
+import { requireAdminOrEditor, isAuthenticated, isAdmin } from '@/utils/auth';
+import { getFullContentMap } from '@/stores/analytics';
+import { getBrandConfig } from '@/utils/api/brandConfig';
+import { preHealthCheck } from '@/utils/backend';
+
+const tenantId =
+  Astro.locals.tenant?.id || import.meta.env.PUBLIC_TENANTID || 'default';
+
+const healthCheckRedirect = await preHealthCheck(tenantId);
+if (healthCheckRedirect !== undefined) {
+  return healthCheckRedirect;
+}
+
+const authCheck = requireAdminOrEditor(Astro);
+if (authCheck) {
+  return authCheck;
+}
+
+const userIsAuthenticated = isAuthenticated(Astro);
+const userIsAdmin = isAdmin(Astro);
+const role = userIsAdmin ? `admin` : userIsAuthenticated ? `editor` : null;
+
+const brandConfig = await getBrandConfig(tenantId);
+const initializing = !brandConfig.SITE_INIT;
+
+// Redirect to branding page during initial setup
+if (initializing) {
+  return Astro.redirect('/storykeep/branding');
+}
+
+const title = 'Content | StoryKeep';
+const createMenu = Astro.url.searchParams.has('create-menu');
+
+let fullContentMap;
+let homeSlug = 'hello';
+
+try {
+  fullContentMap = await getFullContentMap(tenantId);
+  homeSlug = fullContentMap.find((item) => item.isHome)?.slug || 'hello';
+} catch (error) {
+  return Astro.redirect(
+    `/maint?from=${encodeURIComponent(Astro.url.pathname)}`
+  );
+}
+---
+
+<Layout title={title} slug="storykeep" isStoryKeep={true}>
+  <main id="main-content" class="min-h-screen w-full">
+    <div class="max-w-5xl p-3.5 md:p-8">
+      <StoryKeepDashboard
+        client:only="react"
+        fullContentMap={fullContentMap}
+        homeSlug={homeSlug}
+        activeTab="content"
+        role={role}
+        initializing={initializing}
+      />
+
+      <StoryKeepDashboard_Content
+        client:only="react"
+        fullContentMap={fullContentMap}
+        homeSlug={homeSlug}
+        createMenu={createMenu}
+      />
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,54 @@
+---
+const { pathname } = Astro.url;
+
+if (pathname.startsWith('/.')) {
+  return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+
+const assetExtensions = [
+  '.webp',
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.gif',
+  '.svg',
+  '.css',
+  '.js',
+  '.woff',
+  '.woff2',
+  '.ttf',
+];
+
+const isAsset = assetExtensions.some((ext) => pathname.endsWith(ext));
+
+if (isAsset || pathname === '/') {
+  // For a missing asset, we can send a minimal 404 response.
+  // The browser will handle the error gracefully (e.g., not display the image).
+  if (isAsset) {
+    return new Response(null, { status: 404, statusText: 'Not Found' });
+  }
+  // For a 404 at the root, we show the simple error page below.
+} else {
+  // If it's not an asset and not the homepage, it's a missing page.
+  // Redirect to the homepage.
+  return Astro.redirect('/');
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Page Not Found</title>
+  </head>
+  <body>
+    <div
+      style="text-align: center; padding: 50px; font-family: Arial, sans-serif;"
+    >
+      <h1>404 - Page Not Found</h1>
+      <p>The page could not be found.</p>
+      <a href="/" style="color: #0066cc;">Go to Home</a>
+    </div>
+  </body>
+</html>
