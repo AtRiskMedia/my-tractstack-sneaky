@@ -58,10 +58,10 @@ export default function TraitsExplorer({
     class: true,
     power: true,
     sneakiness: true,
-    attack: lockedTrait === 'attack',
-    special: lockedTrait === 'special',
-    profession: lockedTrait === 'profession',
-    species: lockedTrait === 'species',
+    attack: !!lockedTrait,
+    special: !!lockedTrait,
+    profession: !!lockedTrait,
+    species: !!lockedTrait,
   });
 
   useEffect(() => {
@@ -136,17 +136,42 @@ export default function TraitsExplorer({
   }, [filteredResources, lockedTrait, traitValue]);
 
   const hasActiveFilters = useMemo(() => {
-    return (
-      filtersState.searchTerm.trim() !== '' ||
-      filtersState.selectedClass.length > 0 ||
-      filtersState.selectedAttack.length > 0 ||
-      filtersState.selectedSpecial.length > 0 ||
-      filtersState.selectedSpecies.length > 0 ||
-      filtersState.selectedProfession.length > 0 ||
-      (filtersState.powerRange && filtersState.powerRange.length > 0) ||
-      (filtersState.sneakinessRange && filtersState.sneakinessRange.length > 0)
-    );
-  }, [filtersState]);
+    const searchTermActive = filtersState.searchTerm.trim() !== '';
+    const classActive =
+      lockedTrait !== 'class' && filtersState.selectedClass.length > 0;
+    const attackActive =
+      lockedTrait !== 'attack' && filtersState.selectedAttack.length > 0;
+    const specialActive =
+      lockedTrait !== 'special' && filtersState.selectedSpecial.length > 0;
+    const speciesActive =
+      lockedTrait !== 'species' && filtersState.selectedSpecies.length > 0;
+    const professionActive =
+      lockedTrait !== 'profession' &&
+      filtersState.selectedProfession.length > 0;
+
+    // Check power range
+    const isPowerRangeActive =
+      filtersState.powerRange.length === 2 &&
+      (filtersState.powerRange[0] !== 1 || filtersState.powerRange[1] !== 100);
+
+    // Check sneakiness range
+    const isSneakinessRangeActive =
+      filtersState.sneakinessRange.length === 2 &&
+      (filtersState.sneakinessRange[0] !== -100 ||
+        filtersState.sneakinessRange[1] !== 100);
+
+    const result =
+      searchTermActive ||
+      classActive ||
+      attackActive ||
+      specialActive ||
+      speciesActive ||
+      professionActive ||
+      isPowerRangeActive ||
+      isSneakinessRangeActive;
+
+    return result;
+  }, [filtersState, lockedTrait]);
 
   const toggleAccordion = (section: string) => {
     setAccordionState((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -308,7 +333,7 @@ export default function TraitsExplorer({
   // Return placeholder with exact structure and dimensions
   if (!isMounted) {
     return (
-      <div className="w-full max-w-none md:max-w-xs">
+      <div className="w-full max-w-none md:max-w-xs" style={{ minWidth: 280 }}>
         <div className="mb-4 md:hidden">
           <div className="rounded-lg border bg-white p-4 shadow-sm">
             <div className="flex items-center gap-3">
@@ -684,7 +709,7 @@ export default function TraitsExplorer({
   const customStyles = `.trait-item[data-highlighted] { background-color: rgba(114, 102, 93, 0.2) !important; color: black !important; }`;
 
   return (
-    <div className="w-full max-w-none md:max-w-xs">
+    <div className="w-full max-w-none md:max-w-xs" style={{ minWidth: 280 }}>
       <style>{customStyles}</style>
       <div className="mb-4 md:hidden">
         <div className="rounded-lg border bg-white p-4 shadow-sm">
@@ -740,7 +765,7 @@ export default function TraitsExplorer({
           )}
         </div>
 
-        {lockedTrait !== 'class' && (
+        {lockedTrait !== 'class' && traitsData.class.length > 0 && (
           <div className="border-b">
             <AccordionHeader title="CLASS" section="class" />
             <TraitListbox
@@ -776,7 +801,7 @@ export default function TraitsExplorer({
           </div>
         )}
 
-        {lockedTrait !== 'attack' && (
+        {lockedTrait !== 'attack' && traitsData.attack.length > 0 && (
           <div className="border-b">
             <AccordionHeader title="ATTACK" section="attack" />
             <TraitListbox
@@ -790,7 +815,7 @@ export default function TraitsExplorer({
           </div>
         )}
 
-        {lockedTrait !== 'special' && (
+        {lockedTrait !== 'special' && traitsData.special.length > 0 && (
           <div className="border-b">
             <AccordionHeader title="SPECIAL ATTACK" section="special" />
             <TraitListbox
@@ -804,7 +829,7 @@ export default function TraitsExplorer({
           </div>
         )}
 
-        {lockedTrait !== 'species' && (
+        {lockedTrait !== 'species' && traitsData.species.length > 0 && (
           <div className="border-b">
             <AccordionHeader title="SPECIES" section="species" />
             <TraitListbox
@@ -818,7 +843,7 @@ export default function TraitsExplorer({
           </div>
         )}
 
-        {lockedTrait !== 'profession' && (
+        {lockedTrait !== 'profession' && traitsData.profession.length > 0 && (
           <div className="border-b">
             <AccordionHeader title="PROFESSION" section="profession" />
             <TraitListbox

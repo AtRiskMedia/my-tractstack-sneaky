@@ -283,7 +283,11 @@ const getImageSrcSet = (character: ResourceNode | null, variant = '') => {
       <aside class="w-full md:w-auto md:flex-shrink-0">
         <div class="space-y-12">
           <div data-collections-wrapper>
-            <CollectionsListbox client:load />
+            <CollectionsListbox
+              lockedTrait={traitType}
+              traitValue={slug}
+              client:load
+            />
           </div>
           <div data-traits-explorer-wrapper>
             <TraitsExplorer

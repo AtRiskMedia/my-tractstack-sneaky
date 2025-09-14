@@ -21,6 +21,12 @@ if (!activeResource) {
   });
 }
 
+const Bio = [
+  "I should already have a glorious bio, but the author hasn't kept up. Too busy polishing second-rate sidekicks while I, the obvious headline act, get dumped with placeholder text. It's not destiny that left me hanging—it's laziness with a pen, and it shows.",
+  "My life is full of revolts over crumbs, nonsense crowned as genius, and victories claimed without effort. That's the spectacle worth writing. Instead, the author stalls, as if my legend can sit quietly in draft mode. Spoiler: it can't.",
+  "So remember this isn't my failure, it's theirs. When the \"real\" bio finally arrives, it won't reveal my greatness—I've had that all along. It'll just expose how long the author dragged their feet before admitting it.",
+];
+
 const categoryCapitalized = route.charAt(0).toUpperCase() + route.slice(1);
 const tokenId = activeResource.optionsPayload?.tokenId;
 const rarityOrder = activeResource.optionsPayload?.rarityOrder;
@@ -117,7 +123,13 @@ const hasLore =
               ))}
             </div>
           ) : (
-            <p class="italic text-gray-500">Lore coming soon</p>
+            <div class="space-y-4">
+              {Bio.map((paragraph: string, index: number) => (
+                <p key={index} class="leading-relaxed text-gray-700">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           )
         }
       </div>
@@ -151,7 +163,7 @@ const hasLore =
                   title="About this Attack"
                   href={`/attack/${slugifyTraitValue(payload.attack)}`}
                 >
-                  (About this Attack)
+                  About this Attack
                 </a>
               </div>
             )
@@ -177,7 +189,7 @@ const hasLore =
                   title="About this Class"
                   href={`/class/${slugifyTraitValue(payload.class)}`}
                 >
-                  (About this Class)
+                  About this Class
                 </a>
               </div>
             )
@@ -237,7 +249,7 @@ const hasLore =
                   title="See all"
                   href={`/special/${slugifyTraitValue(payload.special)}`}
                 >
-                  (See all)
+                  See all
                 </a>
               </div>
             )
@@ -263,7 +275,7 @@ const hasLore =
                   title="See all"
                   href={`/profession/${slugifyTraitValue(payload.profession)}`}
                 >
-                  (See all)
+                  See all
                 </a>
               </div>
             )
@@ -289,7 +301,7 @@ const hasLore =
                   title="See all"
                   href={`/species/${slugifyTraitValue(payload.species)}`}
                 >
-                  (See all)
+                  See all
                 </a>
               </div>
             )
@@ -393,7 +405,13 @@ const hasLore =
               ))}
             </div>
           ) : (
-            <p class="text-lg italic text-gray-500">Lore coming soon</p>
+            <div class="space-y-4">
+              {Bio.map((paragraph: string, index: number) => (
+                <p key={index} class="leading-relaxed text-gray-700">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           )
         }
       </div>
@@ -427,7 +445,7 @@ const hasLore =
                   title="About this Attack"
                   href={`/attack/${slugifyTraitValue(payload.attack)}`}
                 >
-                  (About this Attack)
+                  About this Attack
                 </a>
               </div>
             )
@@ -453,7 +471,7 @@ const hasLore =
                   title="About this Class"
                   href={`/class/${slugifyTraitValue(payload.class)}`}
                 >
-                  (About this Class)
+                  About this Class
                 </a>
               </div>
             )
@@ -513,7 +531,7 @@ const hasLore =
                   title="See all"
                   href={`/special/${slugifyTraitValue(payload.special)}`}
                 >
-                  (See all)
+                  See all
                 </a>
               </div>
             )
@@ -539,7 +557,7 @@ const hasLore =
                   title="See all"
                   href={`/profession/${slugifyTraitValue(payload.profession)}`}
                 >
-                  (See all)
+                  See all
                 </a>
               </div>
             )
@@ -565,7 +583,7 @@ const hasLore =
                   title="See all"
                   href={`/species/${slugifyTraitValue(payload.species)}`}
                 >
-                  (See all)
+                  See all
                 </a>
               </div>
             )

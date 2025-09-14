@@ -95,6 +95,53 @@ export const setTotalItems = (count: number) => {
   viewState.setKey('totalItems', count);
 };
 
+export const setCollectionsForLockedTrait = (
+  lockedTrait: string,
+  traitValue: string
+) => {
+  const resources = allResources.get();
+  const fullTraitSlug = `${lockedTrait}-${traitValue}`;
+
+  // Determine which collections have resources matching this specific trait
+  const availableCollections = {
+    animals: false,
+    people: false,
+    stuff: false,
+  };
+
+  Object.entries(resources).forEach(([collectionName, collectionResources]) => {
+    if (collectionResources && collectionResources.length > 0) {
+      const hasMatchingTrait = collectionResources.some((resource) => {
+        if (!resource || !resource.optionsPayload) return false;
+        const payload = resource.optionsPayload;
+
+        switch (lockedTrait) {
+          case 'attack':
+            return payload.attack === fullTraitSlug;
+          case 'class':
+            return payload.class === fullTraitSlug;
+          case 'special':
+            return payload.special === fullTraitSlug;
+          case 'species':
+            return payload.species === fullTraitSlug;
+          case 'profession':
+            return payload.profession === fullTraitSlug;
+          default:
+            return false;
+        }
+      });
+
+      if (hasMatchingTrait && collectionName in availableCollections) {
+        availableCollections[
+          collectionName as keyof typeof availableCollections
+        ] = true;
+      }
+    }
+  });
+
+  activeCollections.set(availableCollections);
+};
+
 export const resetTraitFilters = () => {
   traitFilters.set({
     searchTerm: '',
@@ -103,22 +150,34 @@ export const resetTraitFilters = () => {
     selectedSpecial: [],
     selectedSpecies: [],
     selectedProfession: [],
-    powerRange: [],
-    sneakinessRange: [],
+    powerRange: [1, 100],
+    sneakinessRange: [-100, 100],
   });
   viewState.set({
     currentPage: 1,
     totalItems: 0,
   });
+
+  // Reset collections to all available collections (based on what has any resources)
+  const resources = allResources.get();
+  const availableCollections = {
+    animals: !!(resources.animals && resources.animals.length > 0),
+    people: !!(resources.people && resources.people.length > 0),
+    stuff: !!(resources.stuff && resources.stuff.length > 0),
+  };
+  activeCollections.set(availableCollections);
 };
 
-export const resetLockedTraitFilters = (lockedTrait: string) => {
+export const resetLockedTraitFilters = (
+  lockedTrait: string,
+  traitValue?: string
+) => {
   const current = traitFilters.get();
   traitFilters.set({
     ...current,
     searchTerm: '',
-    powerRange: [],
-    sneakinessRange: [],
+    powerRange: [1, 100],
+    sneakinessRange: [-100, 100],
     // Keep the locked trait, reset others
     selectedClass: lockedTrait === 'class' ? current.selectedClass : [],
     selectedAttack: lockedTrait === 'attack' ? current.selectedAttack : [],
@@ -131,4 +190,18 @@ export const resetLockedTraitFilters = (lockedTrait: string) => {
     currentPage: 1,
     totalItems: 0,
   });
+
+  // Reset collections to those available for the locked trait
+  if (traitValue) {
+    setCollectionsForLockedTrait(lockedTrait, traitValue);
+  } else {
+    // Fallback to all available collections if no traitValue provided
+    const resources = allResources.get();
+    const availableCollections = {
+      animals: !!(resources.animals && resources.animals.length > 0),
+      people: !!(resources.people && resources.people.length > 0),
+      stuff: !!(resources.stuff && resources.stuff.length > 0),
+    };
+    activeCollections.set(availableCollections);
+  }
 };

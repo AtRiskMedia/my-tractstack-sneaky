@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import { Listbox, createListCollection } from '@ark-ui/react/listbox';
-import { activeCollections } from '@/custom/store/sneaky';
+import { allResources, activeCollections } from '@/custom/store/sneaky';
 import {
   CheckBoxUnchecked,
   CheckBoxChecked,
@@ -13,35 +13,86 @@ interface CollectionItem {
   value: keyof typeof activeCollections.value;
 }
 
-const collections: CollectionItem[] = [
+const allCollections: CollectionItem[] = [
   { id: 'animals', label: 'Sneaky Animals', value: 'animals' },
   { id: 'people', label: 'Sneaky People', value: 'people' },
   { id: 'stuff', label: 'Sneaky Stuff', value: 'stuff' },
 ];
 
-export default function CollectionsListbox() {
+export interface Props {
+  lockedTrait?: string;
+  traitValue?: string;
+}
+
+export default function CollectionsListbox({ lockedTrait, traitValue }: Props) {
   const [isMounted, setIsMounted] = useState(false);
+  const resources = useStore(allResources);
   const collectionsState = useStore(activeCollections);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  // Determine which collections should be visible
+  const availableCollections = useMemo(() => {
+    if (lockedTrait && traitValue) {
+      // For locked trait pages, show only collections that have matching resources
+      const fullTraitSlug = `${lockedTrait}-${traitValue}`;
+
+      return allCollections.filter((collection) => {
+        const collectionResources = resources[collection.value];
+        if (!collectionResources || collectionResources.length === 0) {
+          return false;
+        }
+
+        // Check if any resource in this collection matches the locked trait
+        return collectionResources.some((resource) => {
+          if (!resource || !resource.optionsPayload) return false;
+          const payload = resource.optionsPayload;
+
+          switch (lockedTrait) {
+            case 'attack':
+              return payload.attack === fullTraitSlug;
+            case 'class':
+              return payload.class === fullTraitSlug;
+            case 'special':
+              return payload.special === fullTraitSlug;
+            case 'species':
+              return payload.species === fullTraitSlug;
+            case 'profession':
+              return payload.profession === fullTraitSlug;
+            default:
+              return false;
+          }
+        });
+      });
+    } else {
+      // For main explorer pages, show all collections that have any resources
+      return allCollections.filter((collection) => {
+        const collectionResources = resources[collection.value];
+        return collectionResources && collectionResources.length > 0;
+      });
+    }
+  }, [resources, lockedTrait, traitValue]);
+
   // Create collection for Ark UI Listbox
   const collection = useMemo(() => {
     return createListCollection({
-      items: collections,
+      items: availableCollections,
       itemToValue: (item) => item.value,
       itemToString: (item) => item.label,
     });
-  }, []);
+  }, [availableCollections]);
 
   // Get currently selected values based on store state
   const selectedValues = useMemo(() => {
     return Object.entries(collectionsState)
-      .filter(([_, active]) => active)
+      .filter(
+        ([key, active]) =>
+          active && availableCollections.some((col) => col.value === key)
+      )
       .map(([key]) => key);
-  }, [collectionsState]);
+  }, [collectionsState, availableCollections]);
 
   // Handle selection changes
   const handleValueChange = (details: { value: string[] }) => {
@@ -56,7 +107,7 @@ export default function CollectionsListbox() {
   // Return placeholder with exact dimensions
   if (!isMounted) {
     return (
-      <div className="w-full max-w-none md:max-w-xs">
+      <div className="w-full max-w-none md:max-w-xs" style={{ minWidth: 280 }}>
         <div className="overflow-hidden rounded-lg bg-white shadow-sm outline outline-1 outline-gray-300">
           <div className="border-b border-gray-200 p-4">
             <h3 className="text-lg font-bold">Collections</h3>
@@ -86,6 +137,11 @@ export default function CollectionsListbox() {
     );
   }
 
+  // Don't render if no collections are available
+  if (availableCollections.length === 0) {
+    return null;
+  }
+
   const customStyles = `
   .collection-item[data-highlighted] {
     background-color: rgba(114, 102, 93, 0.2) !important;
@@ -100,7 +156,7 @@ export default function CollectionsListbox() {
 `;
 
   return (
-    <div className="w-full max-w-none md:max-w-xs">
+    <div className="w-full max-w-none md:max-w-xs" style={{ minWidth: 280 }}>
       <style>{customStyles}</style>
       <div className="overflow-hidden rounded-lg bg-white shadow-sm outline outline-1 outline-gray-300">
         <div className="border-b border-gray-200 p-4">

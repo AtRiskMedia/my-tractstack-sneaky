@@ -23,7 +23,12 @@ const hardcodedMenuId = '01JXXTQEAV6F1H7Z0VX6HB0379';
 const goBackend = import.meta.env.PUBLIC_GO_BACKEND || 'http://localhost:8080';
 try {
   const menuResponse = await fetch(
-    `${goBackend}/api/v1/nodes/menus/${hardcodedMenuId}`
+    `${goBackend}/api/v1/nodes/menus/${hardcodedMenuId}`,
+    {
+      headers: {
+        'X-Tenant-ID': 'default',
+      },
+    }
   );
   if (menuResponse.ok) {
     menuPayload = await menuResponse.json();
@@ -42,7 +47,12 @@ const pageTitle =
   `${route}=${slug}`;
 ---
 
-<Layout id={`${route}-collections-page`} title={pageTitle}>
+<Layout
+  id={`${route}-collections-page`}
+  title={pageTitle}
+  menu={menuPayload}
+  brandConfig={brandConfig}
+>
   <main id="main-content" class="w-full">
     {
       slug ? (

@@ -153,6 +153,9 @@ function renderCard(resource: ResourceNode): string {
             <div class="flex h-full w-full items-center justify-center bg-black">
               ${imageTag}
             </div>
+	    <div class="absolute top-2 right-2 rounded-full bg-red-600 px-2 md:px-4 py-1 md:py-2 text-base md:text-lg font-bold uppercase tracking-wide text-white">
+  ${resource.type}
+</div>
           </div>
           <div class="relative z-0 -mt-20 rounded-xl bg-brand-7 px-4 pb-4 pt-20 text-white shadow-lg">
             <h3 class="truncate text-sm font-bold uppercase tracking-wide text-white transition-colors duration-200 group-hover:text-amber-200">${typeCapitalized} | ${displayName}</h3>
@@ -366,9 +369,14 @@ function updateGrid() {
     const resetButton = gridElement.querySelector('[data-reset-filters]');
     if (resetButton) {
       resetButton.addEventListener('click', () => {
-        currentLockedTrait
-          ? resetLockedTraitFilters(currentLockedTrait)
-          : resetTraitFilters();
+        if (currentLockedTrait) {
+          // Extract traitValue from URL for locked trait pages
+          const urlParts = window.location.pathname.split('/');
+          const traitValue = urlParts[urlParts.length - 1];
+          resetLockedTraitFilters(currentLockedTrait, traitValue);
+        } else {
+          resetTraitFilters();
+        }
       });
     }
     return;
