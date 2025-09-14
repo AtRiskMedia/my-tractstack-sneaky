@@ -23,7 +23,7 @@ const SettingsPanel = ({ config, availableCodeHooks }: SettingsPanelProps) => {
 
   return (
     <div
-      className="bg-mydarkgrey rounded-xl bg-opacity-20 p-0.5 backdrop-blur-sm"
+      className="rounded-xl bg-mydarkgrey bg-opacity-20 p-0.5 backdrop-blur-sm"
       style={
         {
           animation: window.matchMedia(
@@ -47,10 +47,10 @@ const SettingsPanel = ({ config, availableCodeHooks }: SettingsPanelProps) => {
         style={{ maxWidth: '90vw' }}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-myblue text-lg font-bold">{panelTitle}</h3>
+          <h3 className="text-lg font-bold text-myblue">{panelTitle}</h3>
           <button
             onClick={() => settingsPanelStore.set(null)}
-            className="hover:text-myblue text-gray-500"
+            className="text-gray-500 hover:text-myblue"
           >
             <XMarkIcon className="h-5 w-5" />
           </button>

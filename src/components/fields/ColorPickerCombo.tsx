@@ -168,12 +168,12 @@ const ColorPickerCombo = ({
   return (
     <div>
       {title && (
-        <span className="text-mydarkgrey block py-2 text-sm">{title}</span>
+        <span className="block py-2 text-sm text-mydarkgrey">{title}</span>
       )}
       <div className="flex items-center space-x-2">
         {allowNull && !hexColor ? (
           // Show empty state with angled stripes pattern when allowNull is true and no color is set
-          <div className="border-mydarkgrey relative h-9 w-12 overflow-hidden rounded">
+          <div className="relative h-9 w-12 overflow-hidden rounded border-mydarkgrey">
             {/* Angled stripes pattern to represent transparency */}
             <div
               className="absolute inset-0"
@@ -201,15 +201,15 @@ const ColorPickerCombo = ({
             type="color"
             value={hexColor || '#ffffff'}
             onChange={(e) => handleHexColorChange(e.target.value)}
-            className="border-mydarkgrey h-9 w-12 rounded"
+            className="h-9 w-12 rounded border-mydarkgrey"
           />
         )}
         {allowNull && (
           <button
             onClick={handleRemoveColor}
-            className="border-mydarkgrey flex h-9 w-9 items-center justify-center rounded"
+            className="flex h-9 w-9 items-center justify-center rounded border-mydarkgrey"
           >
-            <XMarkIcon className="text-mydarkgrey h-5 w-5" aria-hidden="true" />
+            <XMarkIcon className="h-5 w-5 text-mydarkgrey" aria-hidden="true" />
           </button>
         )}
         {!skipTailwind && (
@@ -226,18 +226,18 @@ const ColorPickerCombo = ({
             >
               <div ref={comboboxRef} className="relative max-w-48">
                 <Combobox.Input
-                  className="border-mydarkgrey focus:border-myblue focus:ring-myblue xs:text-sm w-full rounded-md py-2 pl-3 pr-10 shadow-sm"
+                  className="w-full rounded-md border-mydarkgrey py-2 pl-3 pr-10 shadow-sm focus:border-myblue focus:ring-myblue xs:text-sm"
                   placeholder="Search Tailwind colors..."
                   autoComplete="off"
                 />
                 <Combobox.Trigger className="absolute inset-y-0 right-0 flex items-center pr-2">
                   <ChevronUpDownIcon
-                    className="text-mydarkgrey h-5 w-5"
+                    className="h-5 w-5 text-mydarkgrey"
                     aria-hidden="true"
                   />
                 </Combobox.Trigger>
                 <Combobox.Content
-                  className={`xs:text-sm absolute z-10 mt-1 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
+                  className={`absolute z-10 mt-1 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none xs:text-sm ${
                     openAbove ? 'bottom-full mb-1' : 'top-full'
                   }`}
                   style={{ maxHeight }}

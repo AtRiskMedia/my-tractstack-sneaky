@@ -22,6 +22,7 @@ const hasCustomImage = [
   'class-timberbeast',
   'class-amish',
   'class-woke',
+  'class-cartel',
   'class-fantasy',
   'class-connoisseur',
   'class-wounded',
@@ -209,7 +210,9 @@ function updateGrid() {
 
   // --- LOGIC CHANGE START ---
   // This function now centralizes the secondary filtering logic.
-  const applySecondaryFilters = (characters: ResourceNode[]): ResourceNode[] => {
+  const applySecondaryFilters = (
+    characters: ResourceNode[]
+  ): ResourceNode[] => {
     return characters.filter((resource) => {
       if (!resource) return false;
       const payload = resource.optionsPayload || {};
@@ -221,59 +224,76 @@ function updateGrid() {
         activeFilters.push((p) => filtersState.selectedClass.includes(p.class));
       }
       if (filtersState.selectedAttack.length > 0) {
-        activeFilters.push((p) => filtersState.selectedAttack.includes(p.attack));
+        activeFilters.push((p) =>
+          filtersState.selectedAttack.includes(p.attack)
+        );
       }
       if (filtersState.selectedSpecial.length > 0) {
-        activeFilters.push((p) => filtersState.selectedSpecial.includes(p.special));
+        activeFilters.push((p) =>
+          filtersState.selectedSpecial.includes(p.special)
+        );
       }
       if (filtersState.selectedSpecies.length > 0) {
-        activeFilters.push((p) => filtersState.selectedSpecies.includes(p.species));
+        activeFilters.push((p) =>
+          filtersState.selectedSpecies.includes(p.species)
+        );
       }
       if (filtersState.selectedProfession.length > 0) {
-        activeFilters.push((p) => filtersState.selectedProfession.includes(p.profession));
+        activeFilters.push((p) =>
+          filtersState.selectedProfession.includes(p.profession)
+        );
       }
 
       // Check range filters.
       if (filtersState.powerRange.length === 2) {
-          const [min, max] = filtersState.powerRange;
-          activeFilters.push((p) => typeof p.power === 'number' && p.power >= min && p.power <= max);
+        const [min, max] = filtersState.powerRange;
+        activeFilters.push(
+          (p) => typeof p.power === 'number' && p.power >= min && p.power <= max
+        );
       }
       if (filtersState.sneakinessRange.length === 2) {
-          const [min, max] = filtersState.sneakinessRange;
-          activeFilters.push((p) => typeof p.sneakiness === 'number' && p.sneakiness >= min && p.sneakiness <= max);
+        const [min, max] = filtersState.sneakinessRange;
+        activeFilters.push(
+          (p) =>
+            typeof p.sneakiness === 'number' &&
+            p.sneakiness >= min &&
+            p.sneakiness <= max
+        );
       }
 
       // If there are no active filters, the character passes.
       if (activeFilters.length === 0) return true;
 
       // The character must pass EVERY active filter (AND logic).
-      return activeFilters.every(filterFn => filterFn(payload));
+      return activeFilters.every((filterFn) => filterFn(payload));
     });
   };
-  
+
   const selectedTraitCards: ResourceNode[] = [];
   // This logic for displaying trait cards is only for non-locked pages.
   if (!fullTraitSlug) {
-      hasCustomImages.forEach((traitType) => {
-          const filterKey =
-              `selected${traitType.charAt(0).toUpperCase() + traitType.slice(1)}` as keyof typeof filtersState;
-          const selectedSlugs = (filtersState as any)[filterKey] as string[] | undefined;
+    hasCustomImages.forEach((traitType) => {
+      const filterKey =
+        `selected${traitType.charAt(0).toUpperCase() + traitType.slice(1)}` as keyof typeof filtersState;
+      const selectedSlugs = (filtersState as any)[filterKey] as
+        | string[]
+        | undefined;
 
-          if (selectedSlugs && selectedSlugs.length > 0) {
-              const sourceResources = resources[traitType];
-              if (sourceResources) {
-                  const foundResources = selectedSlugs
-                      .filter((slug) => hasCustomImage.includes(slug))
-                      .map((slug): ResourceNode | null => {
-                          const resource = sourceResources.find((r) => r?.slug === slug);
-                          if (!resource) return null;
-                          return { ...resource, type: traitType };
-                      })
-                      .filter((r): r is ResourceNode => r !== null);
-                  selectedTraitCards.push(...foundResources);
-              }
-          }
-      });
+      if (selectedSlugs && selectedSlugs.length > 0) {
+        const sourceResources = resources[traitType];
+        if (sourceResources) {
+          const foundResources = selectedSlugs
+            .filter((slug) => hasCustomImage.includes(slug))
+            .map((slug): ResourceNode | null => {
+              const resource = sourceResources.find((r) => r?.slug === slug);
+              if (!resource) return null;
+              return { ...resource, type: traitType };
+            })
+            .filter((r): r is ResourceNode => r !== null);
+          selectedTraitCards.push(...foundResources);
+        }
+      }
+    });
   }
 
   const allCharacterResources: ResourceNode[] = [];
@@ -292,17 +312,22 @@ function updateGrid() {
       if (!resource) return false;
       const payload = resource.optionsPayload || {};
       switch (currentLockedTrait) {
-        case 'attack': return payload.attack === fullTraitSlug;
-        case 'class': return payload.class === fullTraitSlug;
-        case 'special': return payload.special === fullTraitSlug;
-        case 'species': return payload.species === fullTraitSlug;
-        case 'profession': return payload.profession === fullTraitSlug;
-        default: return false;
+        case 'attack':
+          return payload.attack === fullTraitSlug;
+        case 'class':
+          return payload.class === fullTraitSlug;
+        case 'special':
+          return payload.special === fullTraitSlug;
+        case 'species':
+          return payload.species === fullTraitSlug;
+        case 'profession':
+          return payload.profession === fullTraitSlug;
+        default:
+          return false;
       }
     });
     // 2. Apply secondary filters from TraitsExplorer on the result.
     filteredResources = applySecondaryFilters(initialFilter);
-
   } else {
     // On main explorer pages, just apply the filters.
     filteredResources = applySecondaryFilters(allCharacterResources);

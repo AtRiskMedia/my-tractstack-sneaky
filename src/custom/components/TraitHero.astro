@@ -19,6 +19,7 @@ const hasCustomImage = [
   'class-woke',
   'class-fantasy',
   'class-connoisseur',
+  'class-cartel',
   'class-wounded',
   'class-alien',
   'class-pirate',
@@ -98,6 +99,7 @@ const fullTraitSlug = `${traitType}-${traitValue}`;
 const useCustomImage = hasCustomImage.includes(fullTraitSlug);
 const useGenericImage = hasCustomImages.includes(traitType);
 const hasImage = useCustomImage || useGenericImage;
+const short = [`attack`, `class`].includes(traitType);
 
 const traitNode = resources[route]?.find(
   (resource: ResourceNode) => resource.slug === fullTraitSlug
@@ -182,97 +184,99 @@ const getImageSrcSet = (character: ResourceNode | null, variant = '') => {
 ---
 
 <div data-trait-type={traitType} data-full-trait-slug={fullTraitSlug}>
-  <div class="relative overflow-hidden">
-    {
-      hasImage ? (
-        <div class="relative mx-auto max-w-5xl">
-          {useCustomImage ? (
-            <img
-              src={`${IMAGE_URL}${path}/${traitType}-${traitValue}_600px.webp`}
-              srcset={`${IMAGE_URL}${path}/${traitType}-${traitValue}_600px.webp 600w, ${IMAGE_URL}${path}/${traitType}-${traitValue}_1080px.webp 1080w, ${IMAGE_URL}${path}/${traitType}-${traitValue}_1920px.webp 1920w`}
-              sizes="(max-width: 1024px) 100vw, 1024px"
-              alt={`${traitDisplayName} trait`}
-              class="h-auto w-full"
-            />
-          ) : (
-            <img
-              src={`${IMAGE_URL}${path}/${traitType}_600px.webp`}
-              srcset={`${IMAGE_URL}${path}/${traitType}_600px.webp 600w, ${IMAGE_URL}${path}/${traitType}_1080px.webp 1080w, ${IMAGE_URL}${path}/${traitType}_1920px.webp 1920w`}
-              sizes="(max-width: 1024px) 100vw, 1024px"
-              alt={`${traitDisplayName} trait`}
-              class="h-auto w-full"
-            />
-          )}
-          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
-            <div class="px-4 py-6 md:px-8 md:py-8">
-              <h1 class="mb-2 text-3xl font-bold uppercase tracking-wide text-white md:text-4xl xl:text-5xl">
-                {traitTypeCapitalized} | {traitDisplayName}
-              </h1>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div class="relative" style={`min-height: 760px;`}>
-          <div class="relative z-10 mx-auto max-w-md px-4 py-24 md:max-w-lg xl:max-w-2xl">
-            <div class="mb-8 text-center">
-              <h1 class="mb-2 text-4xl font-bold uppercase tracking-wide text-gray-900 xl:text-5xl">
-                {traitTypeCapitalized} | {traitDisplayName}
-              </h1>
-              {representativeCharacter && (
-                <div class="text-lg text-gray-600">
-                  <span>Such as {representativeCharacter.title}</span>
-                  <span class="mx-2">•</span>
-                  <span class="capitalize">
-                    {representativeCharacter.collection}
-                  </span>
-                  <span class="mx-2">•</span>
-                  <span>Rank #{representativeCharacter.rarityOrder}</span>
+  {
+    short && (
+      <>
+        <div class="relative overflow-hidden">
+          {hasImage ? (
+            <div class="relative mx-auto max-w-5xl">
+              {useCustomImage ? (
+                <img
+                  src={`${IMAGE_URL}${path}/${traitType}-${traitValue}_600px.webp`}
+                  srcset={`${IMAGE_URL}${path}/${traitType}-${traitValue}_600px.webp 600w, ${IMAGE_URL}${path}/${traitType}-${traitValue}_1080px.webp 1080w, ${IMAGE_URL}${path}/${traitType}-${traitValue}_1920px.webp 1920w`}
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  alt={`${traitDisplayName} trait`}
+                  class="h-auto w-full"
+                />
+              ) : (
+                <img
+                  src={`${IMAGE_URL}${path}/${traitType}_600px.webp`}
+                  srcset={`${IMAGE_URL}${path}/${traitType}_600px.webp 600w, ${IMAGE_URL}${path}/${traitType}_1080px.webp 1080w, ${IMAGE_URL}${path}/${traitType}_1920px.webp 1920w`}
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  alt={`${traitDisplayName} trait`}
+                  class="h-auto w-full"
+                />
+              )}
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
+                <div class="px-4 py-6 md:px-8 md:py-8">
+                  <h1 class="mb-2 text-3xl font-bold uppercase tracking-wide text-white md:text-4xl xl:text-5xl">
+                    {traitTypeCapitalized} | {traitDisplayName}
+                  </h1>
                 </div>
+              </div>
+            </div>
+          ) : (
+            <div class="relative" style={`min-height: 760px;`}>
+              <div class="relative z-10 mx-auto max-w-md px-4 py-24 md:max-w-lg xl:max-w-2xl">
+                <div class="mb-8 text-center">
+                  <h1 class="mb-2 text-4xl font-bold uppercase tracking-wide text-gray-900 xl:text-5xl">
+                    {traitTypeCapitalized} | {traitDisplayName}
+                  </h1>
+                  {representativeCharacter && (
+                    <div class="text-lg text-gray-600">
+                      <span>Such as {representativeCharacter.title}</span>
+                      <span class="mx-2">•</span>
+                      <span class="capitalize">
+                        {representativeCharacter.collection}
+                      </span>
+                      <span class="mx-2">•</span>
+                      <span>Rank #{representativeCharacter.rarityOrder}</span>
+                    </div>
+                  )}
+                </div>
+                {hasLore && (
+                  <div class="mb-8 space-y-4">
+                    {traitNode.optionsPayload.body.map((p: string) => (
+                      <p class="leading-relaxed text-gray-700">{p}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div
+                class="pointer-events-none absolute top-0 z-0 hidden h-full w-full items-center md:flex"
+                style={`left: calc(50% + 150px); width: calc(50% - 150px);`}
+              >
+                {representativeCharacter && (
+                  <img
+                    src={getImageUrl(representativeCharacter, 'nobg')}
+                    srcset={getImageSrcSet(representativeCharacter, 'nobg')}
+                    sizes="50vw"
+                    alt={`${traitDisplayName} representative`}
+                    class="h-auto w-full max-w-xl object-contain"
+                    style={`max-height: 80vh;`}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {hasImage && (
+            <div class="mx-auto max-w-md px-4 py-8 md:max-w-lg md:py-12 xl:max-w-2xl">
+              {hasLore ? (
+                <div class="space-y-4">
+                  {traitNode.optionsPayload.body.map((p: string) => (
+                    <p class="text-lg leading-relaxed text-gray-700">{p}</p>
+                  ))}
+                </div>
+              ) : (
+                <p class="text-lg italic text-gray-500">Lore coming soon</p>
               )}
             </div>
-            {hasLore && (
-              <div class="mb-8 space-y-4">
-                {traitNode.optionsPayload.body.map((p: string) => (
-                  <p class="leading-relaxed text-gray-700">{p}</p>
-                ))}
-              </div>
-            )}
-          </div>
-          <div
-            class="pointer-events-none absolute top-0 z-0 hidden h-full w-full items-center md:flex"
-            style={`left: calc(50% + 150px); width: calc(50% - 150px);`}
-          >
-            {representativeCharacter && (
-              <img
-                src={getImageUrl(representativeCharacter, 'nobg')}
-                srcset={getImageSrcSet(representativeCharacter, 'nobg')}
-                sizes="50vw"
-                alt={`${traitDisplayName} representative`}
-                class="h-auto w-full max-w-xl object-contain"
-                style={`max-height: 80vh;`}
-              />
-            )}
-          </div>
-        </div>
-      )
-    }
-
-    {
-      hasImage && (
-        <div class="mx-auto max-w-md px-4 py-8 md:max-w-lg md:py-12 xl:max-w-2xl">
-          {hasLore ? (
-            <div class="space-y-4">
-              {traitNode.optionsPayload.body.map((p: string) => (
-                <p class="text-lg leading-relaxed text-gray-700">{p}</p>
-              ))}
-            </div>
-          ) : (
-            <p class="text-lg italic text-gray-500">Lore coming soon</p>
           )}
         </div>
-      )
-    }
-  </div>
+      </>
+    )
+  }
 
   <div class="p-6">
     <div class="flex flex-col gap-8 md:flex-row">
