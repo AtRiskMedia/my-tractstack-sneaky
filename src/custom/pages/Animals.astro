@@ -4,6 +4,7 @@ import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import { getBrandConfig } from '@/utils/api/brandConfig';
 import CharacterHero from '@/custom/components/CharacterHero.astro';
+import { getOrSetSessionId } from '@/lib/session';
 import type { MenuNode } from '@/types/tractstack';
 import type { ResourceNode } from '@/types/compositorTypes';
 
@@ -16,7 +17,10 @@ export interface Props {
 
 const { route, slug, resources } = Astro.props;
 
-const brandConfig = await getBrandConfig(`default`);
+const tenantId =
+  Astro.locals.tenant?.id || import.meta.env.PUBLIC_TENANTID || 'default';
+const brandConfig = await getBrandConfig(tenantId);
+const sessionId = await getOrSetSessionId(Astro, tenantId);
 
 let menuPayload: MenuNode | null = null;
 const hardcodedMenuId = '01JXXTQEAV6F1H7Z0VX6HB0379';
@@ -48,10 +52,11 @@ const pageTitle =
 ---
 
 <Layout
-  id={`${route}-collections-page`}
+  storyfragmentId={activeResource?.id}
   title={pageTitle}
   menu={menuPayload}
   brandConfig={brandConfig}
+  sessionId={sessionId}
 >
   <main id="main-content" class="w-full">
     {

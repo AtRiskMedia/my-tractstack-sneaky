@@ -211,9 +211,9 @@ const StyleWidgetPanelAdd = ({ node, parentNode, childId }: BasePanelProps) => {
           id="show-advanced"
           checked={showAdvanced}
           onChange={(e) => setShowAdvanced(e.target.checked)}
-          className="h-4 w-4 rounded border-mydarkgrey text-cyan-600 focus:ring-cyan-600"
+          className="border-mydarkgrey h-4 w-4 rounded text-cyan-600 focus:ring-cyan-600"
         />
-        <label htmlFor="show-advanced" className="text-sm text-mydarkgrey">
+        <label htmlFor="show-advanced" className="text-mydarkgrey text-sm">
           Show Advanced Styles
         </label>
       </div>
@@ -229,13 +229,13 @@ const StyleWidgetPanelAdd = ({ node, parentNode, childId }: BasePanelProps) => {
         >
           <div className="relative">
             <Combobox.Input
-              className="w-full rounded-md border-mydarkgrey py-2 pl-3 pr-10 text-xl shadow-sm focus:border-myblue focus:ring-myblue"
+              className="border-mydarkgrey focus:border-myblue focus:ring-myblue w-full rounded-md py-2 pl-3 pr-10 text-xl shadow-sm"
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search styles..."
             />
             <Combobox.Trigger className="absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronUpDownIcon
-                className="h-5 w-5 text-mydarkgrey"
+                className="text-mydarkgrey h-5 w-5"
                 aria-hidden="true"
               />
             </Combobox.Trigger>
@@ -243,7 +243,7 @@ const StyleWidgetPanelAdd = ({ node, parentNode, childId }: BasePanelProps) => {
 
           <Combobox.Content className="absolute z-50 mt-1 max-h-64 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             {collection.items.length === 0 ? (
-              <div className="relative cursor-default select-none px-4 py-2 text-mydarkgrey">
+              <div className="text-mydarkgrey relative cursor-default select-none px-4 py-2">
                 Nothing found.
               </div>
             ) : (
@@ -277,7 +277,7 @@ const StyleWidgetPanelAdd = ({ node, parentNode, childId }: BasePanelProps) => {
               <button
                 key={style.key}
                 onClick={() => handleSelect({ value: [style.key] })}
-                className="inline-flex items-center rounded-md bg-slate-50 px-3 py-2 text-sm text-black transition-colors duration-200 hover:bg-mygreen/20"
+                className="hover:bg-mygreen/20 inline-flex items-center rounded-md bg-slate-50 px-3 py-2 text-sm text-black transition-colors duration-200"
               >
                 <span className="font-bold">{style.title}</span>
               </button>

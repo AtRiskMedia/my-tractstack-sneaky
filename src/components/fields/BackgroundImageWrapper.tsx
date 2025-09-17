@@ -101,7 +101,7 @@ const BackgroundImageWrapper = ({
         allowNull={true}
       />
       {!bgNode && (
-        <div className="sm:flex-row flex flex-col gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row">
           <div className="flex-1">
             <h4 className="mb-2 text-sm font-bold text-gray-700">
               Background Image
@@ -137,7 +137,7 @@ const BackgroundImageWrapper = ({
                     value={pos}
                     checked={position === pos}
                     onChange={() => handlePositionChange(pos)}
-                    className="h-4 w-4 border-gray-300 text-myblue focus:ring-myblue"
+                    className="text-myblue focus:ring-myblue h-4 w-4 border-gray-300"
                   />
                   <span className="ml-2 text-sm capitalize text-gray-700">
                     {pos}
@@ -162,7 +162,7 @@ const BackgroundImageWrapper = ({
                       value={s}
                       checked={size === s}
                       onChange={() => handleSizeChange(s)}
-                      className="h-4 w-4 border-gray-300 text-myblue focus:ring-myblue"
+                      className="text-myblue focus:ring-myblue h-4 w-4 border-gray-300"
                     />
                     <span className="ml-2 text-sm capitalize text-gray-700">
                       {s === 'narrow'

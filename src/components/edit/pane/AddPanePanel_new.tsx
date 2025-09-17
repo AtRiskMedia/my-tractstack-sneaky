@@ -345,7 +345,7 @@ const AddPaneNewPanel = ({
         </button>
 
         <div className="ml-4 flex flex-wrap items-center gap-x-6 gap-y-2 py-2">
-          <div className="flex-none rounded px-2 py-2.5 font-action text-sm font-bold text-cyan-700 shadow-sm">
+          <div className="font-action flex-none rounded px-2 py-2.5 text-sm font-bold text-cyan-700 shadow-sm">
             + Design New Pane
           </div>
 
@@ -373,7 +373,7 @@ const AddPaneNewPanel = ({
 
       {shouldShowDesigns && (
         <>
-          <h3 className="px-3.5 pb-1.5 pt-4 font-action text-xl font-bold text-black">
+          <h3 className="font-action px-3.5 pb-1.5 pt-4 text-xl font-bold text-black">
             1. Template design settings
           </h3>
 
@@ -402,7 +402,7 @@ const AddPaneNewPanel = ({
                 </Select.Control>
                 <Portal>
                   <Select.Positioner>
-                    <Select.Content className="sm:text-sm z-50 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none">
+                    <Select.Content className="z-50 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                       {themesCollection.items.map((theme) => (
                         <Select.Item
                           key={theme}
@@ -434,7 +434,7 @@ const AddPaneNewPanel = ({
                     Category
                   </Select.Label>
                   <Select.Control className="relative mt-1">
-                    <Select.Trigger className="sm:text-sm relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300">
+                    <Select.Trigger className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
                       <Select.ValueText className="block truncate">
                         {selectedCategory.title}
                       </Select.ValueText>
@@ -448,7 +448,7 @@ const AddPaneNewPanel = ({
                   </Select.Control>
                   <Portal>
                     <Select.Positioner>
-                      <Select.Content className="sm:text-sm z-50 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none">
+                      <Select.Content className="z-50 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                         {categoryCollection.items.map((category) => (
                           <Select.Item
                             key={category.id}
@@ -500,7 +500,7 @@ const AddPaneNewPanel = ({
             </div>
           </div>
 
-          <h3 className="px-3.5 pb-1.5 pt-4 font-action text-xl font-bold text-black">
+          <h3 className="font-action px-3.5 pb-1.5 pt-4 text-xl font-bold text-black">
             2. Choose design
           </h3>
 
@@ -524,7 +524,7 @@ const AddPaneNewPanel = ({
                       : () =>
                           handleTemplateInsert(preview.template, nodeId, first)
                   }
-                  className={`group relative w-full rounded-sm bg-mywhite shadow-inner ${
+                  className={`bg-mywhite group relative w-full rounded-sm shadow-inner ${
                     isInserting
                       ? 'cursor-not-allowed opacity-50'
                       : 'cursor-pointer'
@@ -576,7 +576,7 @@ const AddPaneNewPanel = ({
                     </div>
                   )}
                 </div>
-                <p className="mt-2 w-full break-words bg-mydarkgrey p-2 text-center text-sm text-white">
+                <p className="bg-mydarkgrey mt-2 w-full break-words p-2 text-center text-sm text-white">
                   {preview.template.title}
                 </p>
               </div>

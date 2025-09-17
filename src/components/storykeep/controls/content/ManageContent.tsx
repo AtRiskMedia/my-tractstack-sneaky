@@ -403,10 +403,10 @@ const ManageContent = ({
                 className={classNames(
                   activeTab === tab.id
                     ? tab.isResourceCategory
-                      ? 'border-dashed border-gray-500 bg-white text-mydarkgrey'
+                      ? 'text-mydarkgrey border-dashed border-gray-500 bg-white'
                       : 'border-cyan-500 bg-cyan-100 text-cyan-700'
                     : tab.isResourceCategory
-                      ? 'border-transparent bg-orange-50 text-mydarkgrey hover:bg-orange-100'
+                      ? 'text-mydarkgrey border-transparent bg-orange-50 hover:bg-orange-100'
                       : 'border-transparent bg-gray-100 text-gray-500 hover:bg-gray-200',
                   'rounded-xl border-2 px-4 py-1.5 text-sm font-bold transition-colors duration-200'
                 )}

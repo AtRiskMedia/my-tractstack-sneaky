@@ -45,11 +45,13 @@ interface ContentMapItem {
 interface EpinetDurationSelectorProps {
   fullContentMap?: ContentMapItem[];
   isLoading?: boolean;
+  hourlyNodeActivity?: any;
 }
 
 const EpinetDurationSelector = ({
   fullContentMap,
   isLoading,
+  hourlyNodeActivity,
 }: EpinetDurationSelectorProps = {}) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -191,16 +193,6 @@ const EpinetDurationSelector = ({
     }
 
     const nowUTC = new Date();
-    const maxPastTime = new Date(
-      nowUTC.getTime() - MAX_ANALYTICS_HOURS * 60 * 60 * 1000
-    );
-
-    if (startUTCTime < maxPastTime) {
-      setErrorMessage(
-        `Start time cannot be more than ${MAX_ANALYTICS_HOURS} hours in the past.`
-      );
-      return;
-    }
 
     if (endUTCTime > nowUTC) {
       setErrorMessage('End time cannot be in the future.');
@@ -657,7 +649,7 @@ const EpinetDurationSelector = ({
                         </button>
 
                         {isDatePickerOpen && (
-                          <div className="sm:w-auto absolute z-10 mt-1 w-full rounded-md bg-white p-2 shadow-lg">
+                          <div className="absolute z-10 mt-1 w-full rounded-md bg-white p-2 shadow-lg sm:w-auto">
                             <div className="mb-2 flex flex-wrap justify-between gap-2">
                               <button
                                 className="rounded-md p-1 text-sm hover:bg-gray-100"
@@ -694,7 +686,7 @@ const EpinetDurationSelector = ({
                               </p>
                             </div>
 
-                            <div className="sm:flex-row flex flex-col gap-4">
+                            <div className="flex flex-col gap-4 sm:flex-row">
                               <div className="flex-1">
                                 <label
                                   htmlFor="start-date"
@@ -933,6 +925,7 @@ const EpinetDurationSelector = ({
               <EpinetTableView
                 fullContentMap={fullContentMap || []}
                 isLoading={isLoading}
+                hourlyNodeActivity={hourlyNodeActivity}
               />
             )}
           </div>
@@ -952,7 +945,7 @@ const EpinetDurationSelector = ({
           <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
 
           {/* Main content bar */}
-          <div className="sm:px-6 lg:px-8 relative mx-auto max-w-7xl px-4 py-4">
+          <div className="relative mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
             <div
               className={`flex items-center justify-between rounded-lg border px-6 py-4 shadow-lg ${styling.bgColor} ${styling.borderColor}`}
             >

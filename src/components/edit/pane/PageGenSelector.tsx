@@ -144,7 +144,7 @@ export const PageCreationSelector = ({
     <div className="p-0.5 shadow-inner">
       <style>{radioGroupStyles}</style>
       <div className="w-full rounded-md bg-white p-6">
-        <h2 className="mb-6 font-action text-2xl font-bold text-gray-900">
+        <h2 className="font-action mb-6 text-2xl font-bold text-gray-900">
           How would you like to create your page?
         </h2>
 

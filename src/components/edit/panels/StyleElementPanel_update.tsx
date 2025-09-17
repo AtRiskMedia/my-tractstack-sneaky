@@ -278,16 +278,16 @@ const StyleElementUpdatePanel = ({
           type="checkbox"
           checked={isOverridden}
           onChange={(e) => handleToggleOverride(e.target.checked)}
-          className="h-4 w-4 rounded border-mydarkgrey text-myorange focus:ring-myorange"
+          className="border-mydarkgrey text-myorange focus:ring-myorange h-4 w-4 rounded"
         />
-        <span className="text-sm text-mydarkgrey">
+        <span className="text-mydarkgrey text-sm">
           {isOverridden
             ? 'Override mode. Styling this element only.'
             : 'You are in quick styles mode. Click to override this element.'}
         </span>
       </div>
 
-      <div className="my-3 flex flex-col gap-y-2.5 text-xl text-mydarkgrey">
+      <div className="text-mydarkgrey my-3 flex flex-col gap-y-2.5 text-xl">
         <ViewportComboBox
           value={mobileValue}
           onFinalChange={handleFinalChange}

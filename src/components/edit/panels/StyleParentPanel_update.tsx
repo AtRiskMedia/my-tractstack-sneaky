@@ -109,7 +109,7 @@ const StyleParentUpdatePanel = ({
           Go Back
         </button>
       </div>
-      <div className="my-3 flex flex-col gap-y-2.5 text-xl text-mydarkgrey">
+      <div className="text-mydarkgrey my-3 flex flex-col gap-y-2.5 text-xl">
         <ViewportComboBox
           value={mobileValue}
           onFinalChange={handleFinalChange}

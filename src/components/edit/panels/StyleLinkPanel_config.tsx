@@ -208,7 +208,7 @@ const StyleLinkConfigPanel = ({ node, config }: StyleLinkConfigPanelProps) => {
             onChange={(e) =>
               handleActionTypeChange(e.target.value as 'goto' | 'bunnyMoment')
             }
-            className="sm:text-sm mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+            className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
           >
             <option value="goto">Navigation Action</option>
             <option value="bunnyMoment">Video Moment Action</option>
@@ -223,7 +223,7 @@ const StyleLinkConfigPanel = ({ node, config }: StyleLinkConfigPanelProps) => {
         <div className="space-y-2">
           <div className="relative overflow-y-auto">
             <div className="absolute inset-x-0">
-              <label className="mb-2 block text-sm text-mydarkgrey">
+              <label className="text-mydarkgrey mb-2 block text-sm">
                 {actionType === 'goto'
                   ? 'Callback Payload'
                   : 'Video Moment Settings'}

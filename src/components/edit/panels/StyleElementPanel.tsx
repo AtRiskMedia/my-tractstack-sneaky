@@ -153,14 +153,14 @@ const StyleElementPanel = ({
       )}
 
       <div className="space-y-4">
-        <ul className="flex flex-wrap gap-x-4 gap-y-1 text-mydarkgrey">
+        <ul className="text-mydarkgrey flex flex-wrap gap-x-4 gap-y-1">
           <li>
             <em>Actions:</em>
           </li>
           <li>
             <button
               onClick={() => handleClickAdd()}
-              className="font-bold text-myblue underline hover:text-black"
+              className="text-myblue font-bold underline hover:text-black"
             >
               Add Style
             </button>

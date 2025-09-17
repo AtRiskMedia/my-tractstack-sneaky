@@ -22,7 +22,7 @@ const BunnyVideo = ({ embedUrl, title, className = '' }: BunnyVideoProps) => {
         className={`flex aspect-video w-full items-center justify-center bg-gray-100 ${className}`}
       >
         <div className="p-4 text-center">
-          <div className="mb-2 text-mydarkgrey">Video URL not set</div>
+          <div className="text-mydarkgrey mb-2">Video URL not set</div>
           <div className="text-mygrey text-sm">
             Configure this widget with a valid Bunny Stream URL
           </div>
@@ -43,7 +43,7 @@ const BunnyVideo = ({ embedUrl, title, className = '' }: BunnyVideoProps) => {
       <div
         className={`flex aspect-video w-full items-center justify-center bg-gray-100 ${className}`}
       >
-        <div className="text-center text-mydarkgrey">Invalid video URL</div>
+        <div className="text-mydarkgrey text-center">Invalid video URL</div>
       </div>
     );
   }
