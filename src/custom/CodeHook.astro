@@ -4,6 +4,7 @@ import ListContent from '@/components/codehooks/ListContent.astro';
 import BunnyVideoWrapper from '@/components/codehooks/BunnyVideoWrapper.astro';
 import EpinetWrapper from '@/components/codehooks/EpinetWrapper';
 import SneakyHome from '@/custom/SneakyHome.astro';
+import SneakyNoah from '@/custom/SneakyNoah.astro';
 import CollectionHero from '@/custom/components/CollectionHero.astro';
 import CharacterGrid from '@/custom/components/CharacterGrid.astro';
 import type { FullContentMapItem } from '@/types/tractstack';
@@ -30,6 +31,7 @@ export const components = {
   'character-grid': true,
   'collection-hero': true,
   'sneaky-home': true,
+  'sneaky-noah': true,
   epinet: true,
 };
 ---
@@ -55,6 +57,8 @@ export const components = {
     })()
   ) : target === 'sneaky-home' ? (
     <SneakyHome />
+  ) : target === 'sneaky-noah' ? (
+    <SneakyNoah />
   ) : (
     <div class="rounded-lg bg-gray-50 p-8 text-center">
       <p class="text-gray-600">CodeHook target "{target}" not found</p>

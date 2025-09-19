@@ -33,8 +33,8 @@ importers:
         specifier: ^5.13.7
         version: 5.13.7(@types/node@22.18.1)(jiti@1.21.7)(rollup@4.50.1)(typescript@5.9.2)(yaml@2.8.1)
       astro-tractstack:
-        specifier: 2.0.0-rc.31
-        version: 2.0.0-rc.31(@astrojs/react@4.3.1(@types/node@22.18.1)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(jiti@1.21.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yaml@2.8.1))(astro@5.13.7(@types/node@22.18.1)(jiti@1.21.7)(rollup@4.50.1)(typescript@5.9.2)(yaml@2.8.1))
+        specifier: 2.0.0-rc.34
+        version: 2.0.0-rc.34(@astrojs/react@4.3.1(@types/node@22.18.1)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(jiti@1.21.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yaml@2.8.1))(astro@5.13.7(@types/node@22.18.1)(jiti@1.21.7)(rollup@4.50.1)(typescript@5.9.2)(yaml@2.8.1))
       d3:
         specifier: ^7.9.0
         version: 7.9.0
@@ -1179,8 +1179,8 @@ packages:
   array-iterate@2.0.1:
     resolution: {integrity: sha512-I1jXZMjAgCMmxT4qxXfPXa6SthSoE8h6gkSI9BGGNv8mP8G/v0blc+qFnZu6K42vTOiuME596QaLO0TP3Lk0xg==}
 
-  astro-tractstack@2.0.0-rc.31:
-    resolution: {integrity: sha512-Jk1YaI5lDTb8Fea+4IVpun0B48qsVgU+u8bc28InhJvhrpokz1WOM3tPMm+VHTY+zt8PMEhpzpJFP4hkNscefQ==}
+  astro-tractstack@2.0.0-rc.34:
+    resolution: {integrity: sha512-kpJj7l3uakuP1SsZodMC4xTGvpq9nCq+huZxkjPG8Vwb1wJDPgTFcyJSSr39GdOdSu6km8AKcdwNkYWymoyUBw==}
     engines: {node: '>=18.14.1'}
     hasBin: true
     peerDependencies:
@@ -4300,7 +4300,7 @@ snapshots:
 
   array-iterate@2.0.1: {}
 
-  astro-tractstack@2.0.0-rc.31(@astrojs/react@4.3.1(@types/node@22.18.1)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(jiti@1.21.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yaml@2.8.1))(astro@5.13.7(@types/node@22.18.1)(jiti@1.21.7)(rollup@4.50.1)(typescript@5.9.2)(yaml@2.8.1)):
+  astro-tractstack@2.0.0-rc.34(@astrojs/react@4.3.1(@types/node@22.18.1)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(jiti@1.21.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yaml@2.8.1))(astro@5.13.7(@types/node@22.18.1)(jiti@1.21.7)(rollup@4.50.1)(typescript@5.9.2)(yaml@2.8.1)):
     dependencies:
       '@astrojs/react': 4.3.1(@types/node@22.18.1)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(jiti@1.21.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yaml@2.8.1)
       astro: 5.13.7(@types/node@22.18.1)(jiti@1.21.7)(rollup@4.50.1)(typescript@5.9.2)(yaml@2.8.1)

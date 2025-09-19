@@ -43,11 +43,11 @@ try {
 
 const targetSlug = `${route}-${slug}`;
 const activeResource = resources[route].find(
-  (resource: any) => resource.slug === targetSlug
+  (resource: ResourceNode) => resource.slug === targetSlug
 );
 
 const pageTitle =
-  resources[route]?.find((r) => r.slug === `${route}-${slug}`)?.title ||
+  resources[route]?.find((r: ResourceNode) => r.slug === `${route}-${slug}`)?.title ||
   `${route}=${slug}`;
 ---
 
