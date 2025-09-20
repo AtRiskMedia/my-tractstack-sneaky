@@ -255,7 +255,7 @@ const enableBunny = import.meta.env.PUBLIC_ENABLE_BUNNY === 'true';
       document.addEventListener('astro:page-load', updateTractstackConfig);
     </script>
   </head>
-  <body class="w-full font-main">
+  <body class="font-main w-full">
     {
       !isEditor && (
         <Header
@@ -274,7 +274,7 @@ const enableBunny = import.meta.env.PUBLIC_ENABLE_BUNNY === 'true';
     }
     <div
       id="loading-indicator"
-      class="fixed left-0 top-0 z-50 h-1 w-full scale-x-0 transform bg-myorange transition-transform duration-300 ease-out"
+      class="bg-myorange fixed left-0 top-0 z-50 h-1 w-full scale-x-0 transform transition-transform duration-300 ease-out"
       style="opacity: 0.5; filter: blur(0.5px);"
     >
     </div>

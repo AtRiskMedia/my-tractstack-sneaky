@@ -574,7 +574,7 @@ export function getSubTitleDesign(
     }
 
     case `onecol-brand`: {
-      ((title = 'Title section v2 one column'),
+      (title = 'Title section v2 one column'),
         (slug = 'section-onecol-brand'),
         (textCOLOR = getColor(
           {
@@ -586,7 +586,7 @@ export function getSubTitleDesign(
             'dark-bold': 'black',
           },
           theme
-        )));
+        ));
       bgColour = tailwindToHex(
         getColor(
           {
@@ -622,7 +622,7 @@ export function getSubTitleDesign(
     }
 
     case `center-brand`: {
-      ((title = 'Title section v2 centered'),
+      (title = 'Title section v2 centered'),
         (slug = 'section-center-brand'),
         (textCOLOR = getColor(
           {
@@ -634,7 +634,7 @@ export function getSubTitleDesign(
             'dark-bold': 'black',
           },
           theme
-        )));
+        ));
       bgColour = tailwindToHex(
         getColor(
           {
@@ -670,7 +670,7 @@ export function getSubTitleDesign(
     }
 
     case `default-brand`: {
-      ((title = 'Title section v2'),
+      (title = 'Title section v2'),
         (slug = 'section-default-brand'),
         (textCOLOR = getColor(
           {
@@ -682,7 +682,7 @@ export function getSubTitleDesign(
             'dark-bold': 'black',
           },
           theme
-        )));
+        ));
       bgColour = tailwindToHex(
         getColor(
           {
@@ -986,11 +986,11 @@ export const getIntroDesign = (
   let slug = '';
   switch (variant) {
     case `center`: {
-      ((title = !bordered
+      (title = !bordered
         ? 'Intro section centered'
         : 'Intro section centered with border'),
         (slug = !bordered ? 'intro-centered' : 'intro-centered-bordered'),
-        (parentClasses[2].mobile.textALIGN = 'center'));
+        (parentClasses[2].mobile.textALIGN = 'center');
       parentClasses[2].mobile.textWRAP = 'balance';
       if (bordered) {
         parentClasses[2].mobile.rounded = 'lg';
@@ -1011,11 +1011,11 @@ export const getIntroDesign = (
     }
 
     case `onecol`: {
-      ((title = !bordered
+      (title = !bordered
         ? 'Intro section one column'
         : 'Intro section one column with border'),
         (slug = !bordered ? 'intro-onecol' : 'intro-onecol-bordered'),
-        (parentClasses[2].mobile.textALIGN = 'left'));
+        (parentClasses[2].mobile.textALIGN = 'left');
       parentClasses[2].mobile.textWRAP = 'pretty';
       parentClasses[2].mobile.maxW = '3xl';
       if (bordered) {
@@ -1036,9 +1036,9 @@ export const getIntroDesign = (
     }
 
     default: {
-      ((title = !bordered ? 'Intro section' : 'Intro section with border'),
+      (title = !bordered ? 'Intro section' : 'Intro section with border'),
         (slug = !bordered ? 'intro-default' : 'intro-default-bordered'),
-        (parentClasses[2].mobile.textALIGN = 'left'));
+        (parentClasses[2].mobile.textALIGN = 'left');
       parentClasses[2].mobile.textWRAP = 'pretty';
       if (bordered) {
         parentClasses[2].mobile.bgCOLOR = getColor(

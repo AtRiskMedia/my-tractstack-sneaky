@@ -150,7 +150,7 @@ export default function SearchResults({
   return (
     <div className="p-6">
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-mydarkgrey">
+        <h2 className="text-mydarkgrey text-lg font-bold">
           {allResultItems.length} result{allResultItems.length !== 1 ? 's' : ''}{' '}
           found
         </h2>
@@ -165,12 +165,12 @@ export default function SearchResults({
         {paginatedItems.map((item) => (
           <div
             key={item.id}
-            className="rounded-lg border border-gray-200 p-4 transition-colors hover:border-myblue"
+            className="rounded-lg border border-gray-200 p-4 transition-colors hover:bg-gray-100"
           >
             <a href={item.url} onClick={onResultClick} className="group block">
               <div className="flex items-start gap-4">
                 <div
-                  className="flex-shrink-0 overflow-hidden rounded-lg bg-mydarkgrey"
+                  className="bg-mydarkgrey hidden flex-shrink-0 overflow-hidden rounded-lg md:block"
                   style={{ width: '120px', height: '67.5px' }}
                 >
                   <img
@@ -185,7 +185,7 @@ export default function SearchResults({
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="mb-2">
-                        <h3 className="line-clamp-2 font-semibold text-mydarkgrey transition-colors group-hover:text-myblue">
+                        <h3 className="text-mydarkgrey group-hover:text-myblue line-clamp-2 font-bold transition-colors">
                           {item.title}
                         </h3>
                       </div>
@@ -219,7 +219,7 @@ export default function SearchResults({
                       </p>
                     </div>
 
-                    <div className="flex-shrink-0 text-right">
+                    <div className="hidden flex-shrink-0 text-right md:block">
                       <div className="mb-2">
                         {getResultBadge(item.type, item.categorySlug)}
                       </div>
@@ -240,7 +240,7 @@ export default function SearchResults({
             page={currentPage}
             onPageChange={(details) => handlePageChange(details.page)}
           >
-            <Pagination.PrevTrigger className="flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm text-mydarkgrey hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50">
+            <Pagination.PrevTrigger className="text-mydarkgrey flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50">
               <ChevronLeftIcon className="mr-1 h-4 w-4" />
               Previous
             </Pagination.PrevTrigger>
@@ -270,7 +270,7 @@ export default function SearchResults({
               }
             </Pagination.Context>
 
-            <Pagination.NextTrigger className="flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm text-mydarkgrey hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50">
+            <Pagination.NextTrigger className="text-mydarkgrey flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50">
               Next
               <ChevronRightIcon className="ml-1 h-4 w-4" />
             </Pagination.NextTrigger>

@@ -86,10 +86,10 @@ const FeaturedContentPreview = (): ReactNode => {
           <h2 className="text-2xl font-bold text-black">
             {fakeFeaturedStory.title}
           </h2>
-          <p className="text-base text-myblack">
+          <p className="text-myblack text-base">
             {fakeFeaturedStory.description}
           </p>
-          <p className="text-sm text-mydarkgrey">
+          <p className="text-mydarkgrey text-sm">
             {formatDate(fakeFeaturedStory.changed)}
           </p>
         </div>
@@ -110,10 +110,10 @@ const FeaturedContentPreview = (): ReactNode => {
               />
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-black">{story.title}</h3>
-                <p className="line-clamp-2 text-sm text-myblack">
+                <p className="text-myblack line-clamp-2 text-sm">
                   {story.description}
                 </p>
-                <p className="mt-1 text-xs text-mydarkgrey">
+                <p className="text-mydarkgrey mt-1 text-xs">
                   {formatDate(story.changed)}
                 </p>
               </div>
