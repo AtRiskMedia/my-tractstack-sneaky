@@ -3,98 +3,103 @@
 ---
 
 <section id="animation-container">
-    <img id="ark-image" src="/media/custom/SneakyStuff_nobg/SneakyStuff_394_600px_nobg.webp" alt="Noah">
+  <a href="/stuff/noah"
+    ><img
+      id="ark-image"
+      src="/media/custom/SneakyStuff_nobg/SneakyStuff_394_600px_nobg.webp"
+      alt="Noah"
+    /></a
+  >
 
-    <svg id="path-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <path id="motionPath" d="M 110,50 C 75,100 25,0 -10,50" stroke="black" fill="none"></path>
-    </svg>
+  <svg id="path-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <path
+      id="motionPath"
+      d="M 110,50 C 75,100 25,0 -10,50"
+      stroke="black"
+      fill="none"></path>
+  </svg>
 </section>
 
 <style>
-    /* The container is exactly 100vh high as requested */
-    #animation-container {
-        height: 100vh;
-        background-color: #000E70;
-        position: relative;
-    }
+  #animation-container {
+    height: 100vh;
+    position: relative;
+  }
 
-    /* The image is fixed to the viewport for animation control */
-    #ark-image {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 500px;
-        max-width: 50vw;
-        height: auto;
-        will-change: transform, opacity;
-        
-        /* Start invisible and off-screen */
-        opacity: 0;
-        transform: translate(110vw, 50vh);
-    }
+  /* The image is fixed to the viewport for animation control */
+  #ark-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 500px;
+    max-width: 50vw;
+    height: auto;
+    will-change: transform, opacity;
 
-    /* The SVG path is a hidden guide */
-    #path-svg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        visibility: hidden;
-    }
+    /* Start invisible and off-screen */
+    opacity: 0;
+    transform: translate(110vw, 50vh);
+  }
+
+  /* The SVG path is a hidden guide */
+  #path-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+  }
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const animationContainer = document.getElementById('animation-container');
-        const arkImage = document.getElementById('ark-image');
-        const motionPath = document.getElementById('motionPath');
+  document.addEventListener('DOMContentLoaded', () => {
+    const animationContainer = document.getElementById('animation-container');
+    const arkImage = document.getElementById('ark-image');
+    const motionPath = document.getElementById('motionPath');
 
-        if (!animationContainer || !arkImage || !motionPath) {
-            return; // Exit if elements are not found
-        }
+    if (!animationContainer || !arkImage || !motionPath) {
+      return; // Exit if elements are not found
+    }
 
-        const pathLength = motionPath.getTotalLength();
+    const pathLength = motionPath.getTotalLength();
 
-        function updateAnimation() {
-            const rect = animationContainer.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
+    function updateAnimation() {
+      const rect = animationContainer.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
 
-            // Check if any part of the container is currently visible on the screen.
-            const isVisible = rect.top < viewportHeight && rect.bottom > 0;
+      // Check if any part of the container is currently visible on the screen.
+      const isVisible = rect.top < viewportHeight && rect.bottom > 0;
 
-            if (isVisible) {
-                // The total distance for the animation to unfold is the container's height (100vh)
-                // plus the viewport's height (100vh).
-                const totalAnimationDistance = rect.height + viewportHeight;
+      if (isVisible) {
+        // The total distance for the animation to unfold is the container's height (100vh)
+        // plus the viewport's height (100vh).
+        const totalAnimationDistance = rect.height + viewportHeight;
 
-                // Calculate how far into that total distance we have scrolled.
-                const scrolledDistance = viewportHeight - rect.top;
+        // Calculate how far into that total distance we have scrolled.
+        const scrolledDistance = viewportHeight - rect.top;
 
-                // This gives a progress value from 0 (container just entering) to 1 (container just leaving).
-                let progress = scrolledDistance / totalAnimationDistance;
-                progress = Math.max(0, Math.min(1, progress)); // Ensure progress stays between 0 and 1.
+        // This gives a progress value from 0 (container just entering) to 1 (container just leaving).
+        let progress = scrolledDistance / totalAnimationDistance;
+        progress = Math.max(0, Math.min(1, progress)); // Ensure progress stays between 0 and 1.
 
-                const point = motionPath.getPointAtLength(progress * pathLength);
-                const rotation = Math.sin(progress * Math.PI * 6) * 12; // Rocking motion
+        const point = motionPath.getPointAtLength(progress * pathLength);
+        const rotation = Math.sin(progress * Math.PI * 6) * 12; // Rocking motion
 
-                // --- CORRECTION ---
-                // The image is now always visible while the container is on screen.
-                // This fixes the "I see nothing" issue.
-                arkImage.style.opacity = '1';
-                arkImage.style.transform = `
+        arkImage.style.opacity = '1';
+        arkImage.style.transform = `
                     translateX(${point.x}vw)
                     translateY(${point.y}vh)
                     translate(-50%, -50%)
                     rotate(${rotation}deg)`;
-            } else {
-                // Hide the image when it is not on screen.
-                arkImage.style.opacity = '0';
-            }
-        }
+      } else {
+        // Hide the image when it is not on screen.
+        arkImage.style.opacity = '0';
+      }
+    }
 
-        window.addEventListener('scroll', updateAnimation, { passive: true });
-        // Run on load to set the correct initial state.
-        updateAnimation();
-    });
+    window.addEventListener('scroll', updateAnimation, { passive: true });
+    // Run on load to set the correct initial state.
+    updateAnimation();
+  });
 </script>

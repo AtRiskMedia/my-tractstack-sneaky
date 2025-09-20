@@ -220,7 +220,7 @@ const PageCreationSpecial = ({
   return (
     <div className="rounded-md bg-white p-6">
       <style>{radioGroupStyles}</style>
-      <div className="text-mydarkgrey mb-6 space-y-6 italic">
+      <div className="mb-6 space-y-6 italic text-mydarkgrey">
         <strong>Note:</strong> when editing web pages (story fragments) be sure
         to click on Topics &amp; Details for each page; (if you see no articles,
         that's why!)
@@ -270,7 +270,7 @@ const PageCreationSpecial = ({
             <div className="mb-2 text-lg font-bold">
               Select Visual Break Style
             </div>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
+            <div className="lg:grid-cols-5 grid grid-cols-2 gap-4 md:grid-cols-3">
               {breakVariants.map((breakVar) => (
                 <div
                   key={breakVar.id}

@@ -148,12 +148,12 @@ const StoryKeepToolMode = ({ isContext }: StoryKeepToolModeProps) => {
       <nav
         id="mainNav"
         ref={navRef}
-        className="z-102 bg-mywhite fixed bottom-0 left-0 right-0 pt-1.5 md:sticky md:bottom-auto md:left-0 md:top-24 md:h-screen md:w-16 md:pt-0"
+        className="fixed bottom-0 left-0 right-0 z-102 bg-mywhite pt-1.5 md:sticky md:bottom-auto md:left-0 md:top-24 md:h-screen md:w-16 md:pt-0"
       >
         <div className="flex flex-wrap justify-around gap-4 py-0.5 md:mt-0 md:flex-col md:items-center md:gap-8 md:space-x-0 md:space-y-2 md:py-2">
-          <div className="text-mydarkgrey text-center text-sm font-bold">
+          <div className="text-center text-sm font-bold text-mydarkgrey">
             mode:
-            <div className="font-action text-myblue pt-1.5 text-center text-xs">
+            <div className="pt-1.5 text-center font-action text-xs text-myblue">
               {currentToolMode.title}
             </div>
           </div>

@@ -1,5 +1,7 @@
 ---
 import Menu from './Menu';
+import SearchWrapper from '@/components/search/SearchWrapper';
+import { getFullContentMap } from '@/stores/analytics';
 import { isAuthenticated, isAdmin, getUserRole } from '@/utils/auth';
 import ImpressionWrapper from '@/components/widgets/ImpressionWrapper';
 import type { MenuNode } from '@/types/tractstack';
@@ -33,6 +35,10 @@ const {
 
 const isHome = slug === brandConfig?.HOME_SLUG;
 
+const tenantId =
+  Astro.locals.tenant?.id || import.meta.env.PUBLIC_TENANTID || 'default';
+const fullContentMap = await getFullContentMap(tenantId);
+
 const getAssetPath = (configPath: string, fallback: string) => {
   // Always prioritize brandConfig values when they exist
   if (configPath && configPath !== '') {
@@ -40,11 +46,8 @@ const getAssetPath = (configPath: string, fallback: string) => {
   }
   return fallback;
 };
-
 const logo = getAssetPath(brandConfig?.LOGO, '/brand/logo.svg');
 const wordmark = getAssetPath(brandConfig?.WORDMARK, '/brand/wordmark.svg');
-
-// Handle empty WORDMARK_MODE by defaulting to "default"
 const wordmarkMode =
   brandConfig?.WORDMARK_MODE && brandConfig.WORDMARK_MODE !== ''
     ? brandConfig.WORDMARK_MODE
@@ -104,16 +107,15 @@ const authStatus = {
 
   <!-- BOTTOM ROW: Title + Action Icons -->
   <div
-    class="bg-mywhite flex flex-row flex-nowrap justify-between px-4 pb-3 pt-4 shadow-inner md:px-8"
+    class="flex flex-row flex-nowrap justify-between bg-mywhite px-4 pb-3 pt-4 shadow-inner md:px-8"
   >
-    <h1 class="text-mydarkgrey truncate text-xl">{title}</h1>
+    <h1 class="truncate text-xl text-mydarkgrey">{title}</h1>
     <div class="flex flex-row flex-nowrap items-center gap-x-2">
-      {/* Home Icon */}
       {
         !isHome ? (
           <a
             href="/"
-            class="text-myblue/80 hover:text-myblue hover:rotate-6"
+            class="text-myblue/80 hover:rotate-6 hover:text-myblue"
             title="Go to home page"
           >
             <svg
@@ -133,16 +135,15 @@ const authStatus = {
         ) : null
       }
 
-      {/* StoryKeep Dashboard Icon */}
       {
         authStatus.isAdmin || authStatus.isAuthenticated ? (
           <a
             href="/storykeep"
-            class="hover:text-myblue hover:rotate-6"
+            class="hover:rotate-6 hover:text-myblue"
             title="Your Story Keep Dashboard"
           >
             <svg
-              class="text-myblue/80 h-6 w-6"
+              class="h-6 w-6 text-myblue/80"
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="1.5"
@@ -158,14 +159,13 @@ const authStatus = {
         ) : null
       }
 
-      {/* Edit Icon */}
       {
         isEditable &&
         (authStatus.isAdmin || authStatus.userRole === 'editor') ? (
           <a
             data-astro-reload
             href={!isContext ? `/${slug}/edit` : `/context/${slug}/edit`}
-            class="text-myblue/80 hover:text-myblue hover:rotate-6"
+            class="text-myblue/80 hover:rotate-6 hover:text-myblue"
             title={!isContext ? 'Edit this story' : 'Edit this page'}
           >
             <svg
@@ -185,7 +185,8 @@ const authStatus = {
         ) : null
       }
 
-      {/* Remember Me Icon */}
+      <SearchWrapper contentMap={fullContentMap} client:load />
+
       <script is:inline define:vars={{ sessionId }}>
         function initRememberMe() {
           const consent = localStorage.getItem('tractstack_consent') === '1';
@@ -247,7 +248,6 @@ const authStatus = {
         ) : null
       }
 
-      {/* Logout Icon - Admin/Editor Only */}
       {
         authStatus.isAdmin || authStatus.userRole === 'editor' ? (
           <a

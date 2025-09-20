@@ -47,8 +47,8 @@ const activeResource = resources[route].find(
 );
 
 const pageTitle =
-  resources[route]?.find((r: ResourceNode) => r.slug === `${route}-${slug}`)?.title ||
-  `${route}=${slug}`;
+  resources[route]?.find((r: ResourceNode) => r.slug === `${route}-${slug}`)
+    ?.title || `${route}=${slug}`;
 ---
 
 <Layout
