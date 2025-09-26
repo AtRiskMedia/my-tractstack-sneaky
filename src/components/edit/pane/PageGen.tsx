@@ -246,7 +246,7 @@ ${additionalInstructions}`;
       ) : (
         <div className="p-0.5 shadow-inner">
           <div className="w-full rounded-md bg-white p-6">
-            <h2 className="font-action mb-6 text-2xl font-bold text-gray-900">
+            <h2 className="mb-6 font-action text-2xl font-bold text-gray-900">
               Generate Page Content with AI
             </h2>
             <div className="space-y-8">

@@ -1,6 +1,7 @@
 import { allResources } from '@/custom/store/sneaky';
 
 const VERBOSE = false;
+const MAX_LENGTH = 200;
 
 // URL Helper: Strip category prefix from slug
 // e.g., "people-bleako" -> "bleako"
@@ -26,7 +27,8 @@ export function getResourceUrl(categorySlug: string, fullSlug: string): string {
 }
 
 // List of traits that have custom images
-const hasCustomImage = [
+export const hasCustomImages = [`attack`, `class`];
+export const hasCustomImage = [
   'class-timberbeast',
   'class-amish',
   'class-woke',
@@ -261,67 +263,38 @@ export function getResourceImage(
   slug: string,
   category: string
 ): string {
-  console.log('getResourceImage called:', { id, slug, category });
   const resources = allResources.get();
   if (VERBOSE) {
+    console.log('getResourceImage called:', { id, slug, category });
     console.log('current resources in store:', resources);
     console.log('store keys:', Object.keys(resources));
   }
 
-  // For character resources (animals/people/stuff), look up tokenId
+  // For character resources (animals/people/stuff)
   if (category === 'animals' || category === 'people' || category === 'stuff') {
-    if (VERBOSE)
-      console.log('processing character resource for category:', category);
+    if (VERBOSE) console.log('Processing character for OG image:', category);
 
     const collection = resources[category];
-    if (VERBOSE) {
-      console.log('collection for', category, ':', collection);
-      console.log(
-        'collection length:',
-        collection ? collection.length : 'undefined'
-      );
-    }
-
     if (collection) {
-      if (VERBOSE) console.log('searching for resource with id:', id);
       const resource = collection.find((r: any) => r.id === id);
-      if (VERBOSE) console.log('found resource:', resource);
-
-      if (
-        resource &&
-        resource.optionsPayload &&
-        resource.optionsPayload.tokenId
-      ) {
+      if (resource?.optionsPayload?.tokenId) {
         const categoryCapitalized =
           category.charAt(0).toUpperCase() + category.slice(1);
-        const imagePath = `/media/custom/Sneaky${categoryCapitalized}/Sneaky${categoryCapitalized}_${resource.optionsPayload.tokenId}_450px.webp`;
-        if (VERBOSE) console.log('character image path:', imagePath);
+        const imagePath = `/media/custom/og/Sneaky${categoryCapitalized}_${resource.optionsPayload.tokenId}_350px.webp`;
+        if (VERBOSE) console.log('OG image path:', imagePath);
         return imagePath;
-      } else {
-        if (VERBOSE) console.log('resource not found or missing tokenId');
       }
-    } else {
-      if (VERBOSE) console.log('no collection found for category:', category);
     }
 
-    if (VERBOSE) console.log('returning static.jpg for character');
+    if (VERBOSE) console.log('Fallback to static.jpg');
     return '/static.jpg';
   }
 
   // For class and attack traits, use trait image logic
-  if (category === 'class' || category === 'attack') {
-    if (VERBOSE)
-      console.log('processing trait resource for category:', category);
-
+  if (hasCustomImages.includes(category)) {
     const name = slug.replace(`${category}-`, '');
     const useCustom = hasCustomImage.includes(slug);
     const path = category === 'class' ? 'classes' : `${category}s`;
-
-    if (VERBOSE) {
-      console.log('trait name:', name);
-      console.log('use custom image:', useCustom);
-      console.log('image path:', path);
-    }
 
     let imagePath;
     if (useCustom) {
@@ -337,4 +310,114 @@ export function getResourceImage(
   // For all other categories, use static fallback
   if (VERBOSE) console.log('using static fallback for category:', category);
   return '/static.jpg';
+}
+export function getResourceDescription(
+  id: string,
+  slug: string,
+  category: string
+): string | null {
+  const resources = allResources.get();
+  if (VERBOSE)
+    console.log(`getResourceDescription`, resources, id, slug, category);
+
+  // For character resources (animals/people/stuff), look up by id
+  if (category === 'animals' || category === 'people' || category === 'stuff') {
+    const collection = resources[category];
+    if (collection) {
+      if (VERBOSE) {
+        console.log(
+          `Looking for ID ${id} in collection:`,
+          collection.slice(0, 3).map((r) => ({ id: r.id, slug: r.slug }))
+        );
+      }
+      const resource = collection.find((r: any) => r.id === id);
+      if (VERBOSE)
+        console.log(
+          `Found resource:`,
+          resource
+            ? {
+                id: resource.id,
+                slug: resource.slug,
+                hasBody: !!resource.optionsPayload?.body,
+              }
+            : 'NOT FOUND'
+        );
+
+      if (resource?.optionsPayload?.body) {
+        if (VERBOSE) console.log(`RAW BODY:`, resource.optionsPayload.body);
+
+        let description = Array.isArray(resource.optionsPayload.body)
+          ? resource.optionsPayload.body[0]
+          : resource.optionsPayload.body;
+
+        if (VERBOSE) console.log(`EXTRACTED DESCRIPTION:`, description);
+        if (VERBOSE) console.log(`DESCRIPTION TYPE:`, typeof description);
+        if (VERBOSE) console.log(`DESCRIPTION LENGTH:`, description?.length);
+
+        if (description && description.length > MAX_LENGTH) {
+          description = description.substring(0, MAX_LENGTH).trim() + '...';
+          if (VERBOSE) console.log(`TRUNCATED DESCRIPTION:`, description);
+        }
+
+        if (VERBOSE) console.log(`RETURNING DESCRIPTION:`, description);
+        return description;
+      } else {
+        if (VERBOSE) console.log(`NO BODY FOUND for character resource`);
+      }
+    } else {
+      if (VERBOSE) console.log(`NO COLLECTION FOUND for category:`, category);
+    }
+  }
+
+  // For trait resources, look up by slug
+  if (hasCustomImages.includes(category)) {
+    const collection = resources[category];
+    if (collection) {
+      if (VERBOSE) {
+        console.log(
+          `Looking for SLUG ${slug} in ${category} collection:`,
+          collection.slice(0, 3).map((r) => ({ id: r.id, slug: r.slug }))
+        );
+      }
+      const resource = collection.find((r: any) => r.slug === slug);
+      if (VERBOSE)
+        console.log(
+          `Found resource:`,
+          resource
+            ? {
+                id: resource.id,
+                slug: resource.slug,
+                hasBody: !!resource.optionsPayload?.body,
+              }
+            : 'NOT FOUND'
+        );
+
+      if (resource?.optionsPayload?.body) {
+        if (VERBOSE) console.log(`RAW BODY:`, resource.optionsPayload.body);
+
+        let description = Array.isArray(resource.optionsPayload.body)
+          ? resource.optionsPayload.body[0]
+          : resource.optionsPayload.body;
+
+        if (VERBOSE) console.log(`EXTRACTED DESCRIPTION:`, description);
+        if (VERBOSE) console.log(`DESCRIPTION TYPE:`, typeof description);
+        if (VERBOSE) console.log(`DESCRIPTION LENGTH:`, description?.length);
+
+        if (description && description.length > MAX_LENGTH) {
+          description = description.substring(0, MAX_LENGTH).trim() + '...';
+          if (VERBOSE) console.log(`TRUNCATED DESCRIPTION:`, description);
+        }
+
+        if (VERBOSE) console.log(`RETURNING DESCRIPTION:`, description);
+        return description;
+      } else {
+        if (VERBOSE) console.log(`NO BODY FOUND for trait resource`);
+      }
+    } else {
+      if (VERBOSE) console.log(`NO COLLECTION FOUND for category:`, category);
+    }
+  }
+
+  if (VERBOSE) console.log(`RETURNING NULL - no description found`);
+  return null;
 }

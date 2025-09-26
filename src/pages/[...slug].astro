@@ -30,7 +30,9 @@ let storyData;
 try {
   storyData = await getStoryData(Astro, lookup, sessionId, tenantId);
 } catch (error) {
-  if (error instanceof Response) {
+  if (error instanceof Response && error.status === 404) {
+    return Astro.redirect('/404');
+  } else if (error instanceof Response) {
     return error;
   }
   console.error('Error fetching storyfragment:', error);
@@ -102,11 +104,17 @@ const brandConfig = await getBrandConfig(tenantId);
 if (!brandConfig.SITE_INIT) {
   return Astro.redirect('/storykeep');
 }
+
+const ogImage =
+  typeof storyData.socialImagePath === `string`
+    ? storyData.socialImagePath
+    : undefined;
 ---
 
 <Layout
   title={storyfragmentTitle}
   slug={lookup || brandConfig.HOME_SLUG}
+  ogImage={ogImage}
   menu={storyData.menu || null}
   created={storyData.created}
   isContext={false}
@@ -125,12 +133,19 @@ if (!brandConfig.SITE_INIT) {
             id={`pane-${paneId}`}
             data-pane-id={paneId}
             class="pane-fragment-container"
+            style={
+              !codeHookTargets[paneId]
+                ? undefined
+                : !storyData.codeHookVisibility?.[paneId]
+                  ? 'display:none;'
+                  : 'display:block;'
+            }
             hx-get={`/api/v1/fragments/panes/${paneId}`}
             hx-trigger="refresh"
             hx-swap="innerHTML"
           >
             {codeHookTargets[paneId] ? (
-              <div class="overflow-hidden">
+              <div class="relative overflow-hidden">
                 <CodeHook
                   target={codeHookTargets[paneId]}
                   options={(() => {
@@ -143,6 +158,38 @@ if (!brandConfig.SITE_INIT) {
                   fullContentMap={fullContentMap}
                   resourcesPayload={resourcesPayload}
                 />
+                <div id={`pane-${paneId}-unset`}>
+                  {Array.isArray(storyData.codeHookVisibility?.[paneId]) && (
+                    <button
+                      type="button"
+                      class="absolute right-2 top-2 z-10 rounded-full bg-white p-1.5 text-mydarkgrey hover:bg-black hover:text-white"
+                      title="Go Back"
+                      hx-post="/api/v1/state"
+                      hx-trigger="click"
+                      hx-swap="none"
+                      hx-vals={JSON.stringify({
+                        unsetBeliefIds:
+                          storyData.codeHookVisibility[paneId].join(','),
+                        paneId: paneId,
+                      })}
+                      hx-preserve="true"
+                    >
+                      <svg
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
               </div>
             ) : (
               <Fragment set:html={fragmentsData[paneId] || ''} />

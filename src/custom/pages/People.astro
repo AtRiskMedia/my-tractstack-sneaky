@@ -49,12 +49,17 @@ const activeResource = resources[route].find(
 const pageTitle =
   resources[route]?.find((r: ResourceNode) => r.slug === `${route}-${slug}`)
     ?.title || `${route}=${slug}`;
+
+const ogImage = activeResource?.optionsPayload?.tokenId
+  ? `/media/custom/og/Sneaky${route.charAt(0).toUpperCase() + route.slice(1)}_${activeResource.optionsPayload.tokenId}.jpg`
+  : undefined;
 ---
 
 <Layout
   storyfragmentId={activeResource?.id}
   title={pageTitle}
   menu={menuPayload}
+  ogImage={ogImage}
   brandConfig={brandConfig}
   sessionId={sessionId}
 >

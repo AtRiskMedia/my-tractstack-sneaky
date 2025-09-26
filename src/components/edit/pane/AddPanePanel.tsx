@@ -53,7 +53,7 @@ const AddPanePanel = ({
 
   // Always render a stable container div for the intersection observer
   return (
-    <div className="add-pane-panel-wrapper border-mydarkgrey border-b-2 border-t-2 border-dotted">
+    <div className="add-pane-panel-wrapper border-b-2 border-t-2 border-dotted border-mydarkgrey">
       {mode === PaneAddMode.NEW || (!hasPanes && first && !reset) ? (
         <AddPaneNewPanel
           nodeId={nodeId}
@@ -87,7 +87,7 @@ const AddPanePanel = ({
           isContextPane={isContextPane}
         />
       ) : (
-        <div className="border-mylightgrey border-t border-dotted">
+        <div className="border-t border-dotted border-mylightgrey">
           <div className="group flex w-full gap-1 px-1.5 pb-0.5 pt-1.5">
             <div className="rounded-md bg-gray-200 px-2 py-1 text-sm text-gray-800">
               Insert Pane Here
