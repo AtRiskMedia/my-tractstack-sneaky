@@ -273,20 +273,20 @@ const StoryFragmentMenuPanel = ({
               >
                 <div className="relative">
                   <Combobox.Input
-                    className="w-full rounded-md border border-mydarkgrey py-2 pl-3 pr-10 text-sm shadow-sm focus:border-myblue focus:ring-myblue"
+                    className="border-mydarkgrey focus:border-myblue focus:ring-myblue w-full rounded-md border py-2 pl-3 pr-10 text-sm shadow-sm"
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Select a menu..."
                   />
                   <Combobox.Trigger className="absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
-                      className="h-5 w-5 text-mydarkgrey"
+                      className="text-mydarkgrey h-5 w-5"
                       aria-hidden="true"
                     />
                   </Combobox.Trigger>
                 </div>
-                <Combobox.Content className="sm:text-sm absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Combobox.Content className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {filteredMenus.length === 0 && query !== '' ? (
-                    <div className="relative cursor-default select-none px-4 py-2 text-mydarkgrey">
+                    <div className="text-mydarkgrey relative cursor-default select-none px-4 py-2">
                       Nothing found.
                     </div>
                   ) : (
@@ -297,7 +297,7 @@ const StoryFragmentMenuPanel = ({
                         className="menu-item relative cursor-default select-none py-2 pl-10 pr-4 text-gray-900"
                       >
                         <span className="block truncate">{menu.title}</span>
-                        <span className="menu-indicator absolute inset-y-0 left-0 flex items-center pl-3 text-myblue">
+                        <span className="menu-indicator text-myblue absolute inset-y-0 left-0 flex items-center pl-3">
                           <CheckIcon className="h-5 w-5" aria-hidden="true" />
                         </span>
                       </Combobox.Item>

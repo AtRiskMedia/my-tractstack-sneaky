@@ -113,7 +113,7 @@ export default function StoryKeepDashboard({
               <h3 className="text-lg font-bold text-black">
                 Welcome to your StoryKeep
               </h3>
-              <div className="mt-2 text-sm text-mydarkgrey">
+              <div className="text-mydarkgrey mt-2 text-sm">
                 <p>
                   Complete your site's branding configuration to get started.
                   (And update as often as you like!)

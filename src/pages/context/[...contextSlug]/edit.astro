@@ -149,7 +149,7 @@ for (const [key, value] of Astro.url.searchParams) {
   <section
     id="storykeepHeader"
     role="banner"
-    class="left-0 right-0 z-101 bg-mywhite drop-shadow transition-all duration-200"
+    class="z-101 bg-mywhite left-0 right-0 drop-shadow transition-all duration-200"
   >
     <StoryKeepHeader slug={contextSlug} isContext={true} client:only="react" />
   </section>
@@ -159,16 +159,10 @@ for (const [key, value] of Astro.url.searchParams) {
     <StoryKeepToolMode isContext={true} client:only="react" />
 
     <!-- Main Content Area -->
-    <main
-      id="mainContent"
-      class="relative flex-1"
-      style={{
-        paddingBottom: 'var(--bottom-right-controls-bottom-offset, 16px)',
-      }}
-    >
-      <div class="h-full bg-myblue/20 bg-mylightgrey p-1.5">
+    <main id="mainContent" class="relative flex-1 overflow-x-auto">
+      <div class="bg-myblue/20 bg-mylightgrey h-full p-1.5">
         <div
-          class="h-fit min-h-screen"
+          class="h-fit min-h-screen pb-96"
           style={{
             backgroundImage:
               'repeating-linear-gradient(135deg, transparent, transparent 10px, rgba(0,0,0,0.05) 10px, rgba(0,0,0,0.05) 20px)',
@@ -192,7 +186,7 @@ for (const [key, value] of Astro.url.searchParams) {
   <!-- Floating Controls (Settings Panel & HUD OR ToolBar) -->
   <aside
     id="settingsControls"
-    class="pointer-events-none fixed bottom-16 right-2 z-101 flex flex-col items-end gap-2 md:bottom-2"
+    class="z-101 pointer-events-none fixed bottom-16 right-2 flex flex-col items-end gap-2 md:bottom-2"
   >
     <div class="pointer-events-none flex-grow"></div>
 
@@ -215,7 +209,6 @@ for (const [key, value] of Astro.url.searchParams) {
 </Layout>
 
 <script>
-  import { setupLayoutObservers, setupLayoutStyles } from '@/utils/layout';
-  setupLayoutStyles();
+  import { setupLayoutObservers } from '@/utils/layout';
   setupLayoutObservers();
 </script>

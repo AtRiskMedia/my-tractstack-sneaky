@@ -4,7 +4,7 @@ import { settingsPanelStore } from '@/stores/storykeep';
 import { StylesMemory } from '@/components/edit/state/StylesMemory';
 import SelectedTailwindClass from '@/components/fields/SelectedTailwindClass';
 import { isMarkdownPaneFragmentNode } from '@/utils/compositor/typeGuards';
-import { widgetMeta } from '@/constants';
+import { regexpHook, widgetMeta } from '@/constants';
 import { getCtx } from '@/stores/nodes';
 import type {
   FlatNode,
@@ -42,8 +42,6 @@ const StyleWidgetPanel = ({
   const outerOverrideClasses = outerContainerNode.overrideClasses;
 
   // Extract the widget type from the node's copy
-  const regexpHook =
-    /^(identifyAs|youtube|bunny|bunnyContext|toggle|resource|belief|signup)\((.*)\)$/;
   const hookMatch = node.copy?.match(regexpHook);
   const widgetId = hookMatch ? hookMatch[1] : 'unknown';
   const widgetName = widgetMeta[widgetId]?.title || `Widget`;
@@ -286,7 +284,7 @@ const StyleWidgetPanel = ({
         <h3 className="text-xl font-bold">Setup {widgetName}</h3>
 
         <div className="pb-2">
-          <div className="w-fit rounded border border-slate-200 p-2 text-sm text-myblack hover:bg-mygreen/20">
+          <div className="text-myblack hover:bg-mygreen/20 w-fit rounded border border-slate-200 p-2 text-sm">
             <div
               title="Configure this Widget"
               className="flex items-center gap-2 font-bold"
@@ -320,14 +318,14 @@ const StyleWidgetPanel = ({
           )}
 
           <div className="space-y-4">
-            <ul className="flex flex-wrap gap-x-4 gap-y-1 text-mydarkgrey">
+            <ul className="text-mydarkgrey flex flex-wrap gap-x-4 gap-y-1">
               <li>
                 <em>Actions:</em>
               </li>
               <li>
                 <button
                   onClick={handleImgAdd}
-                  className="font-bold text-myblue underline hover:text-black"
+                  className="text-myblue font-bold underline hover:text-black"
                 >
                   Add Style
                 </button>
@@ -364,14 +362,14 @@ const StyleWidgetPanel = ({
         )}
 
         <div className="space-y-4">
-          <ul className="flex flex-wrap gap-x-4 gap-y-1 text-mydarkgrey">
+          <ul className="text-mydarkgrey flex flex-wrap gap-x-4 gap-y-1">
             <li>
               <em>Actions:</em>
             </li>
             <li>
               <button
                 onClick={handleContainerAdd}
-                className="font-bold text-myblue underline hover:text-black"
+                className="text-myblue font-bold underline hover:text-black"
               >
                 Add Style
               </button>
@@ -405,14 +403,14 @@ const StyleWidgetPanel = ({
         )}
 
         <div className="space-y-4">
-          <ul className="flex flex-wrap gap-x-4 gap-y-1 text-mydarkgrey">
+          <ul className="text-mydarkgrey flex flex-wrap gap-x-4 gap-y-1">
             <li>
               <em>Actions:</em>
             </li>
             <li>
               <button
                 onClick={handleOuterAdd}
-                className="font-bold text-myblue underline hover:text-black"
+                className="text-myblue font-bold underline hover:text-black"
               >
                 Add Style
               </button>

@@ -14,7 +14,9 @@ import {
   type SnapshotData,
 } from '@/components/compositor/preview/PaneSnapshotGenerator';
 import { createEmptyStorykeep } from '@/utils/compositor/nodesHelper';
+import { tailwindToHex } from '@/utils/compositor/tailwindColors';
 import { getTemplateVisualBreakPane } from '@/utils/compositor/TemplatePanes';
+import { SvgBreaks } from '@/constants/shapes';
 import {
   PaneAddMode,
   type PaneNode,
@@ -243,8 +245,16 @@ const AddPaneBreakPanel = ({
       }
     }
 
-    template.bgColour = belowColor;
-    const svgFill = aboveColor === belowColor ? 'black' : aboveColor;
+    const shapeName = `kCz${variant}`;
+    const isFlipped = SvgBreaks[shapeName]?.flipped || false;
+    template.bgColour = tailwindToHex(
+      isFlipped ? aboveColor : belowColor,
+      null
+    );
+    const svgFill = tailwindToHex(
+      isFlipped ? belowColor : aboveColor === belowColor ? 'black' : aboveColor,
+      null
+    );
 
     if (template.bgPane) {
       if (template.bgPane.type === 'visual-break') {
@@ -296,7 +306,7 @@ const AddPaneBreakPanel = ({
         </button>
 
         <div className="ml-4 flex flex-wrap items-center gap-x-6 gap-y-2 py-2">
-          <div className="flex-none rounded px-2 py-2.5 font-action text-sm font-bold text-cyan-700 shadow-sm">
+          <div className="font-action flex-none rounded px-2 py-2.5 text-sm font-bold text-cyan-700 shadow-sm">
             + Visual Break
           </div>
 
@@ -316,7 +326,7 @@ const AddPaneBreakPanel = ({
               composite={true}
             >
               <div className="relative">
-                <div className="sm:text-sm relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300">
+                <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
                   <Combobox.Input
                     autoComplete="off"
                     className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
@@ -330,7 +340,7 @@ const AddPaneBreakPanel = ({
                   </Combobox.Trigger>
                 </div>
 
-                <Combobox.Content className="sm:text-sm absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none">
+                <Combobox.Content className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                   {collection.items.length === 0 ? (
                     <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
                       Nothing found.
@@ -358,7 +368,7 @@ const AddPaneBreakPanel = ({
         </div>
       </div>
 
-      <h3 className="px-3.5 pb-1.5 pt-4 font-action text-xl font-bold text-black">
+      <h3 className="font-action px-3.5 pb-1.5 pt-4 text-xl font-bold text-black">
         Click on a break design to use:
       </h3>
 
@@ -379,7 +389,7 @@ const AddPaneBreakPanel = ({
             onClick={() =>
               handleVisualBreakInsert(preview.variant, nodeId, first)
             }
-            className={`group relative w-full cursor-pointer rounded-sm bg-mywhite shadow-inner transition-all duration-200 ${
+            className={`bg-mywhite group relative w-full cursor-pointer rounded-sm shadow-inner transition-all duration-200 ${
               preview.snapshot
                 ? 'hover:outline-solid hover:outline hover:outline-4'
                 : ''
@@ -423,7 +433,7 @@ const AddPaneBreakPanel = ({
                     className="w-full"
                   />
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 rounded-t-md bg-mydarkgrey px-2 py-1 text-sm text-white group-hover:bg-myblack">
+                <div className="bg-mydarkgrey group-hover:bg-myblack absolute bottom-0 left-0 right-0 rounded-t-md px-2 py-1 text-sm text-white">
                   {preview.variant}
                 </div>
               </>

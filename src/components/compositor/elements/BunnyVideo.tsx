@@ -6,15 +6,21 @@ interface BunnyVideoProps {
 
 const BUNNY_EMBED_BASE_URL = 'https://iframe.mediadelivery.net/embed/';
 
+const isValidBunnyVideoId = (id: string): boolean => {
+  if (!id) return false;
+  const videoIdRegex = /^\d+\/[a-f0-9\-]{36}$/;
+  return videoIdRegex.test(id);
+};
+
 const BunnyVideo = ({ videoId, title, className = '' }: BunnyVideoProps) => {
-  // If no videoId is provided, render the placeholder.
-  if (!videoId) {
+  // If the videoId is missing or has an invalid format, render the placeholder.
+  if (!isValidBunnyVideoId(videoId)) {
     return (
       <div
         className={`flex aspect-video w-full items-center justify-center bg-gray-100 ${className}`}
       >
         <div className="p-4 text-center">
-          <div className="mb-2 text-mydarkgrey">Video ID not set</div>
+          <div className="text-mydarkgrey mb-2">Video ID not set</div>
           <div className="text-mygrey text-sm">
             Configure this widget with a valid Bunny Video ID
           </div>
@@ -38,7 +44,7 @@ const BunnyVideo = ({ videoId, title, className = '' }: BunnyVideoProps) => {
       <div
         className={`flex aspect-video w-full items-center justify-center bg-gray-100 ${className}`}
       >
-        <div className="text-center text-mydarkgrey">Invalid Video ID</div>
+        <div className="text-mydarkgrey text-center">Invalid Video ID</div>
       </div>
     );
   }

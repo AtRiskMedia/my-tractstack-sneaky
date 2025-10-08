@@ -360,6 +360,7 @@ export function getJustCopyDesign(
       baseClasses[2].mobile.maxW = '3xl';
       if (bordered) {
         baseClasses[2].mobile.rounded = 'lg';
+        baseClasses[2].mobile.shadow = 'md';
         baseClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -371,7 +372,6 @@ export function getJustCopyDesign(
           },
           theme
         );
-        baseClasses[2].mobile.shadow = 'md';
       }
       break;
     }
@@ -385,6 +385,7 @@ export function getJustCopyDesign(
       baseClasses[2].mobile.textWRAP = 'balance';
       if (bordered) {
         baseClasses[2].mobile.rounded = 'lg';
+        baseClasses[2].mobile.shadow = 'md';
         baseClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -396,7 +397,6 @@ export function getJustCopyDesign(
           },
           theme
         );
-        baseClasses[2].mobile.shadow = 'md';
       }
       break;
     }
@@ -408,6 +408,7 @@ export function getJustCopyDesign(
       baseClasses[2].mobile.textWRAP = 'pretty';
       if (bordered) {
         baseClasses[2].mobile.rounded = 'lg';
+        baseClasses[2].mobile.shadow = 'md';
         baseClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -419,7 +420,6 @@ export function getJustCopyDesign(
           },
           theme
         );
-        baseClasses[2].mobile.shadow = 'md';
       }
     }
   }
@@ -507,6 +507,7 @@ export function getSubTitleDesign(
       baseClasses[2].mobile.maxW = '3xl';
       if (bordered) {
         baseClasses[2].mobile.rounded = 'lg';
+        baseClasses[2].mobile.shadow = 'md';
         baseClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -518,7 +519,6 @@ export function getSubTitleDesign(
           },
           theme
         );
-        baseClasses[2].mobile.shadow = 'md';
       }
       break;
     }
@@ -557,6 +557,7 @@ export function getSubTitleDesign(
       baseClasses[2].mobile.textWRAP = 'balance';
       if (bordered) {
         baseClasses[2].mobile.rounded = 'lg';
+        baseClasses[2].mobile.shadow = 'md';
         baseClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -568,13 +569,12 @@ export function getSubTitleDesign(
           },
           theme
         );
-        baseClasses[2].mobile.shadow = 'md';
       }
       break;
     }
 
     case `onecol-brand`: {
-      ((title = 'Title section v2 one column'),
+      (title = 'Title section v2 one column'),
         (slug = 'section-onecol-brand'),
         (textCOLOR = getColor(
           {
@@ -586,7 +586,7 @@ export function getSubTitleDesign(
             'dark-bold': 'black',
           },
           theme
-        )));
+        ));
       bgColour = tailwindToHex(
         getColor(
           {
@@ -605,6 +605,7 @@ export function getSubTitleDesign(
       baseClasses[2].mobile.textWRAP = 'pretty';
       baseClasses[2].mobile.maxW = '3xl';
       if (bordered) {
+        baseClasses[2].mobile.shadow = 'md';
         baseClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -616,13 +617,12 @@ export function getSubTitleDesign(
           },
           theme
         );
-        baseClasses[2].mobile.shadow = 'md';
       }
       break;
     }
 
     case `center-brand`: {
-      ((title = 'Title section v2 centered'),
+      (title = 'Title section v2 centered'),
         (slug = 'section-center-brand'),
         (textCOLOR = getColor(
           {
@@ -634,7 +634,7 @@ export function getSubTitleDesign(
             'dark-bold': 'black',
           },
           theme
-        )));
+        ));
       bgColour = tailwindToHex(
         getColor(
           {
@@ -653,6 +653,7 @@ export function getSubTitleDesign(
       baseClasses[2].mobile.textWRAP = 'balance';
       if (bordered) {
         baseClasses[2].mobile.rounded = 'lg';
+        baseClasses[2].mobile.shadow = 'md';
         baseClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -664,13 +665,12 @@ export function getSubTitleDesign(
           },
           theme
         );
-        baseClasses[2].mobile.shadow = 'md';
       }
       break;
     }
 
     case `default-brand`: {
-      ((title = 'Title section v2'),
+      (title = 'Title section v2'),
         (slug = 'section-default-brand'),
         (textCOLOR = getColor(
           {
@@ -682,7 +682,7 @@ export function getSubTitleDesign(
             'dark-bold': 'black',
           },
           theme
-        )));
+        ));
       bgColour = tailwindToHex(
         getColor(
           {
@@ -700,6 +700,7 @@ export function getSubTitleDesign(
       baseClasses[2].mobile.textALIGN = 'left';
       baseClasses[2].mobile.textWRAP = 'pretty';
       if (bordered) {
+        baseClasses[2].mobile.shadow = 'md';
         baseClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -711,7 +712,6 @@ export function getSubTitleDesign(
           },
           theme
         );
-        baseClasses[2].mobile.shadow = 'md';
       }
       break;
     }
@@ -748,6 +748,7 @@ export function getSubTitleDesign(
       baseClasses[2].mobile.textWRAP = 'pretty';
       if (bordered) {
         baseClasses[2].mobile.rounded = 'lg';
+        baseClasses[2].mobile.shadow = 'md';
         baseClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -759,7 +760,6 @@ export function getSubTitleDesign(
           },
           theme
         );
-        baseClasses[2].mobile.shadow = 'md';
       }
     }
   }
@@ -986,14 +986,15 @@ export const getIntroDesign = (
   let slug = '';
   switch (variant) {
     case `center`: {
-      ((title = !bordered
+      (title = !bordered
         ? 'Intro section centered'
         : 'Intro section centered with border'),
         (slug = !bordered ? 'intro-centered' : 'intro-centered-bordered'),
-        (parentClasses[2].mobile.textALIGN = 'center'));
+        (parentClasses[2].mobile.textALIGN = 'center');
       parentClasses[2].mobile.textWRAP = 'balance';
       if (bordered) {
         parentClasses[2].mobile.rounded = 'lg';
+        parentClasses[2].mobile.shadow = 'lg';
         parentClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -1005,20 +1006,20 @@ export const getIntroDesign = (
           },
           theme
         );
-        parentClasses[2].mobile.shadow = 'lg';
       }
       break;
     }
 
     case `onecol`: {
-      ((title = !bordered
+      (title = !bordered
         ? 'Intro section one column'
         : 'Intro section one column with border'),
         (slug = !bordered ? 'intro-onecol' : 'intro-onecol-bordered'),
-        (parentClasses[2].mobile.textALIGN = 'left'));
+        (parentClasses[2].mobile.textALIGN = 'left');
       parentClasses[2].mobile.textWRAP = 'pretty';
       parentClasses[2].mobile.maxW = '3xl';
       if (bordered) {
+        parentClasses[2].mobile.shadow = 'lg';
         parentClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -1030,17 +1031,17 @@ export const getIntroDesign = (
           },
           theme
         );
-        parentClasses[2].mobile.shadow = 'lg';
       }
       break;
     }
 
     default: {
-      ((title = !bordered ? 'Intro section' : 'Intro section with border'),
+      (title = !bordered ? 'Intro section' : 'Intro section with border'),
         (slug = !bordered ? 'intro-default' : 'intro-default-bordered'),
-        (parentClasses[2].mobile.textALIGN = 'left'));
+        (parentClasses[2].mobile.textALIGN = 'left');
       parentClasses[2].mobile.textWRAP = 'pretty';
       if (bordered) {
+        parentClasses[2].mobile.shadow = 'lg';
         parentClasses[2].mobile.bgCOLOR = getColor(
           {
             light: useOdd ? 'brand-2' : 'white',
@@ -1052,7 +1053,6 @@ export const getIntroDesign = (
           },
           theme
         );
-        parentClasses[2].mobile.shadow = 'lg';
       }
     }
   }
@@ -1101,6 +1101,7 @@ export const getImageHeroSectionDefault = (
   parentClasses[2].mobile.textALIGN = 'left';
   parentClasses[2].mobile.textWRAP = 'pretty';
   if (bordered) {
+    parentClasses[2].mobile.shadow = 'lg';
     parentClasses[2].mobile.bgCOLOR = getColor(
       {
         light: useOdd ? 'brand-2' : 'white',
@@ -1112,7 +1113,6 @@ export const getImageHeroSectionDefault = (
       },
       theme
     );
-    parentClasses[2].mobile.shadow = 'lg';
   }
 
   return {

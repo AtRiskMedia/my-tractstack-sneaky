@@ -1,7 +1,8 @@
 ---
-// Sneaky Productions Home Component
+// The staggered grid content.
 ---
 
+<!-- Original Staggered Grid Content -->
 <div class="container">
   <div class="staggered-grid">
     <div class="grid-row">
@@ -109,334 +110,154 @@
 </div>
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-  }
-
-  .staggered-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 120px;
-    overflow: hidden;
-  }
-
-  .grid-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    position: relative;
-  }
-
-  .grid-item {
-    width: 36%;
-  }
-  #lore.grid-item {
-    width: 42%;
-  }
-  #sneakypedia.grid-item {
-    width: 30%;
-  }
-  #cards.grid-item {
-    width: 39%;
-  }
-  #shop.grid-item {
-    width: 30%;
-  }
-
-  .grid-item img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    transition:
-      transform 0.3s ease,
-      filter 0.3s ease;
-    cursor: pointer;
-  }
-
-  .grid-item a {
-    display: block;
-    text-decoration: none;
-  }
-
-  .grid-item img:hover {
-    transform: scale(1.05) rotate(2deg);
-  }
-
-  .grid-row .grid-item:nth-child(1) {
-    margin-top: 200px;
-  }
-
-  /* Coming Soon Styles */
-  .coming-soon-wrapper {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-  }
-
-  .coming-soon img {
-    filter: grayscale(100%) opacity(0.6);
-    transition:
-      filter 0.3s ease,
-      transform 0.3s ease;
-  }
-
-  .coming-soon-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-
-  .coming-soon-text {
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-family:
-      system-ui,
-      -apple-system,
-      sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    text-align: center;
-    white-space: nowrap;
-  }
-
-  .coming-soon:hover .coming-soon-overlay {
-    opacity: 1;
-  }
-
-  .coming-soon:hover img {
-    filter: grayscale(100%) opacity(0.4);
-    transform: scale(1.02);
-  }
-
-  /* --- DESKTOP DECORATIONS (NOW PROPORTIONAL) --- */
-
-  /* Row 1: loop1.webp between Sneakypedia and Lore */
-  .grid-row:nth-child(1)::before {
-    content: '';
-    position: absolute;
-    width: 45%;
-    height: 100%;
-    background: url('/custom/home/loop1_1080px.webp') no-repeat center;
-    background-size: contain;
-    left: 28%;
-    top: 10%;
-    z-index: -1;
-  }
-
-  /* Row 1: coins.webp flowing down from first row toward second row */
-  .grid-row:nth-child(1)::after {
-    content: '';
-    position: absolute;
-    width: 45%;
-    height: 225%;
-    background: url('/custom/home/coins_1080px.webp') no-repeat center;
-    background-size: contain;
-    left: 48%;
-    transform: translateX(-50%);
-    bottom: -140%;
-    z-index: -1;
-  }
-
-  /* Row 3: loop2.webp flowing from Sneakyfolio to Sneaky Cards */
-  .grid-row:nth-child(3)::before {
-    content: '';
-    position: absolute;
-    width: 65%;
-    height: 380%;
-    background: url('/custom/home/loop2_1080px.webp') no-repeat center;
-    background-size: contain;
-    right: 4%;
-    top: -205%;
-    z-index: -1;
-    filter: grayscale(100%) opacity(0.4);
-  }
-
-  /* Row 3: coins.webp between Shop and Sneaky Cards */
-  .grid-row:nth-child(3)::after {
-    content: '';
-    position: absolute;
-    width: 40%;
-    height: 250%;
-    background: url('/custom/home/coins_1080px.webp') no-repeat center;
-    background-size: contain;
-    left: 45%;
-    transform: translateX(-50%);
-    top: 0%;
-    z-index: -1;
-    filter: grayscale(100%) opacity(0.4);
-  }
+  /* All original styles are untouched. */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+  .staggered-grid { display: flex; flex-direction: column; gap: 120px; overflow: hidden; }
+  .grid-row { display: flex; justify-content: space-between; align-items: flex-start; position: relative; }
+  .grid-item { width: 36%; }
+  #lore.grid-item { width: 42%; } /* This ID is used by the script */
+  #sneakypedia.grid-item { width: 30%; }
+  #cards.grid-item { width: 39%; }
+  #shop.grid-item { width: 30%; }
+  .grid-item img { width: 100%; height: auto; object-fit: contain; transition: transform 0.3s ease, filter 0.3s ease; cursor: pointer; }
+  .grid-item a { display: block; text-decoration: none; }
+  .grid-item img:hover { transform: scale(1.05) rotate(2deg); }
+  .grid-row .grid-item:nth-child(1) { margin-top: 200px; }
+  .coming-soon-wrapper { position: relative; display: inline-block; width: 100%; }
+  .coming-soon img { filter: grayscale(100%) opacity(0.6); transition: filter 0.3s ease, transform 0.3s ease; }
+  .coming-soon-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+  .coming-soon-text { background: rgba(0, 0, 0, 0.8); color: white; padding: 12px 24px; border-radius: 8px; font-family: system-ui, -apple-system, sans-serif; font-size: 18px; font-weight: 600; text-align: center; white-space: nowrap; }
+  .coming-soon:hover .coming-soon-overlay { opacity: 1; }
+  .coming-soon:hover img { filter: grayscale(100%) opacity(0.4); transform: scale(1.02); }
+  .grid-row:nth-child(1)::before { content: ''; position: absolute; width: 45%; height: 100%; background: url('/custom/home/loop1_1080px.webp') no-repeat center; background-size: contain; left: 28%; top: 10%; z-index: -1; }
+  .grid-row:nth-child(1)::after { content: ''; position: absolute; width: 45%; height: 225%; background: url('/custom/home/coins_1080px.webp') no-repeat center; background-size: contain; left: 48%; transform: translateX(-50%); bottom: -140%; z-index: -1; }
+  .grid-row:nth-child(3)::before { content: ''; position: absolute; width: 65%; height: 380%; background: url('/custom/home/loop2_1080px.webp') no-repeat center; background-size: contain; right: 4%; top: -205%; z-index: -1; filter: grayscale(100%) opacity(0.4); }
+  .grid-row:nth-child(3)::after { content: ''; position: absolute; width: 40%; height: 250%; background: url('/custom/home/coins_1080px.webp') no-repeat center; background-size: contain; left: 45%; transform: translateX(-50%); top: 0%; z-index: -1; filter: grayscale(100%) opacity(0.4); }
 
   @media (max-width: 800px) {
-    .staggered-grid {
-      gap: 320px;
-    }
-
-    .grid-row {
-      flex-direction: column;
-      align-items: center;
-      gap: 250px;
-    }
-
-    .grid-item {
-      width: 60%;
-    }
-    #lore.grid-item {
-      width: 70%;
-    }
-    #sneakypedia.grid-item {
-      width: 50%;
-    }
-    #cards.grid-item {
-      margin-top: 150px;
-      width: 65%;
-    }
-    #shop.grid-item {
-      width: 50%;
-    }
-    #plushies.grid-item {
-      margin-top: -150px;
-    }
-
-    .grid-row .grid-item:nth-child(1) {
-      margin-top: 0;
-    }
-
-    .coming-soon-text {
-      font-size: 16px;
-      padding: 10px 20px;
-    }
-
-    /* Hide ALL desktop pseudo-elements by default */
-    .grid-row::before,
-    .grid-row::after {
-      display: none;
-    }
-
-    /* --- Mobile-Specific Reordering & Decorations --- */
-
-    .grid-row:nth-child(1) .grid-item:nth-child(1) {
-      order: 2;
-    }
-
-    .grid-row:nth-child(1) .grid-item:nth-child(2) {
-      order: 1;
-    }
-
-    .grid-row:nth-child(2) .grid-item:nth-child(1) {
-      order: 2;
-    }
-
-    .grid-row:nth-child(2) .grid-item:nth-child(2) {
-      order: 1;
-    }
-
-    /* --- MOBILE DECORATIONS (NOW PROPORTIONAL) --- */
-
-    .grid-row:nth-child(1)::after {
-      display: block;
-      content: '';
-      position: absolute;
-      width: 70%;
-      height: 50%;
-      background: url('/custom/home/loop-vertical-1_600px.webp') no-repeat
-        center;
-      background-size: contain;
-      left: 40%;
-      top: 60%;
-      transform: translate(-35%, -50%);
-      z-index: -1;
-    }
-
-    .grid-row:nth-child(2)::before {
-      display: block;
-      content: '';
-      position: absolute;
-      width: 50%;
-      height: 70%;
-      background: url('/custom/home/coins_600px.webp') no-repeat center;
-      background-size: contain;
-      left: 50%;
-      top: -48%;
-      transform: translateX(-50%);
-      z-index: -1;
-    }
-
-    .grid-row:nth-child(2)::after {
-      display: block;
-      content: '';
-      position: absolute;
-      width: 25%;
-      height: 30%;
-      background: url('/custom/home/loop-vertical-2_600px.webp') no-repeat
-        center;
-      background-size: contain;
-      left: 45%;
-      top: 48%;
-      transform: translate(-35%, -50%);
-      z-index: -1;
-    }
-
-    .grid-row:nth-child(3)::before {
-      display: block;
-      content: '';
-      position: absolute;
-      width: 50%;
-      height: 70%;
-      background: url('/custom/home/coins_600px.webp') no-repeat center;
-      background-size: contain;
-      left: 50%;
-      top: -48%;
-      transform: translateX(-50%);
-      z-index: -1;
-      filter: grayscale(100%) opacity(0.4);
-    }
-
-    .grid-row:nth-child(3)::after {
-      display: block;
-      content: '';
-      position: absolute;
-      width: 40%;
-      height: 32%;
-      background: url('/custom/home/loop-vertical_600px.webp') no-repeat center;
-      background-size: contain;
-      left: 40%;
-      top: 45%;
-      transform: translate(-35%, -50%);
-      z-index: -1;
-      filter: grayscale(100%) opacity(0.4);
-    }
-
-    .grid-row:nth-child(4)::before {
-      display: block;
-      content: '';
-      position: absolute;
-      width: 60%;
-      height: 80%;
-      background: url('/custom/home/coins-reverse_600px.webp') no-repeat center;
-      background-size: contain;
-      left: 50%;
-      top: -60%;
-      transform: translateX(-50%);
-      z-index: -1;
-      filter: grayscale(100%) opacity(0.4);
-    }
+    .staggered-grid { gap: 320px; }
+    .grid-row { flex-direction: column; align-items: center; gap: 250px; }
+    .grid-item { width: 60%; }
+    #lore.grid-item { width: 70%; }
+    #sneakypedia.grid-item { width: 50%; }
+    #cards.grid-item { margin-top: 150px; width: 65%; }
+    #shop.grid-item { width: 50%; }
+    #plushies.grid-item { margin-top: -150px; }
+    .grid-row .grid-item:nth-child(1) { margin-top: 0; }
+    .coming-soon-text { font-size: 16px; padding: 10px 20px; }
+    .grid-row::before, .grid-row::after { display: none; }
+    .grid-row:nth-child(1) .grid-item:nth-child(1) { order: 2; }
+    .grid-row:nth-child(1) .grid-item:nth-child(2) { order: 1; }
+    .grid-row:nth-child(2) .grid-item:nth-child(1) { order: 2; }
+    .grid-row:nth-child(2) .grid-item:nth-child(2) { order: 1; }
+    .grid-row:nth-child(1)::after { display: block; content: ''; position: absolute; width: 70%; height: 50%; background: url('/custom/home/loop-vertical-1_600px.webp') no-repeat center; background-size: contain; left: 40%; top: 60%; transform: translate(-35%, -50%); z-index: -1; }
+    .grid-row:nth-child(2)::before { display: block; content: ''; position: absolute; width: 50%; height: 70%; background: url('/custom/home/coins_600px.webp') no-repeat center; background-size: contain; left: 50%; top: -48%; transform: translateX(-50%); z-index: -1; }
+    .grid-row:nth-child(2)::after { display: block; content: ''; position: absolute; width: 25%; height: 30%; background: url('/custom/home/loop-vertical-2_600px.webp') no-repeat center; background-size: contain; left: 45%; top: 48%; transform: translate(-35%, -50%); z-index: -1; }
+    .grid-row:nth-child(3)::before { display: block; content: ''; position: absolute; width: 50%; height: 70%; background: url('/custom/home/coins_600px.webp') no-repeat center; background-size: contain; left: 50%; top: -48%; transform: translateX(-50%); z-index: -1; filter: grayscale(100%) opacity(0.4); }
+    .grid-row:nth-child(3)::after { display: block; content: ''; position: absolute; width: 40%; height: 32%; background: url('/custom/home/loop-vertical_600px.webp') no-repeat center; background-size: contain; left: 40%; top: 45%; transform: translate(-35%, -50%); z-index: -1; filter: grayscale(100%) opacity(0.4); }
+    .grid-row:nth-child(4)::before { display: block; content: ''; position: absolute; width: 60%; height: 80%; background: url('/custom/home/coins-reverse_600px.webp') no-repeat center; background-size: contain; left: 50%; top: -60%; transform: translateX(-50%); z-index: -1; filter: grayscale(100%) opacity(0.4); }
   }
 </style>
+
+<script>
+  function initParallaxDynamite() {
+    const heroImage = document.querySelector('img[alt="Sneaky island full of characters"]');
+    const loreElement = document.getElementById('lore');
+    
+    if (!heroImage || !loreElement) {
+      console.error('[Parallax] Required elements not found');
+      return;
+    }
+
+    // Create dynamite overlay
+    const dynamite = document.createElement('img');
+    dynamite.id = 'dynamite-overlay';
+    dynamite.srcset = `/custom/home/sneaky-hero-only-boom_600px.webp 600w,
+                       /custom/home/sneaky-hero-only-boom_1080px.webp 1080w,
+                       /custom/home/sneaky-hero-only-boom_1920px.webp 1920w`;
+    dynamite.sizes = "100vw";
+    dynamite.src = "/custom/home/sneaky-hero-only-boom_1080px.webp";
+    dynamite.alt = "Dynamite overlay";
+    dynamite.style.cssText = `
+      position: fixed;
+      z-index: 999999;
+      pointer-events: none;
+      opacity: 1;
+    `;
+    document.body.appendChild(dynamite);
+
+    // Setup lore
+    loreElement.style.transition = 'opacity 0.4s ease-out';
+    loreElement.style.opacity = '0';
+
+    let baseline = null;
+    let ticking = false;
+
+    function getParallaxSpeed() {
+      const width = window.innerWidth;
+      if (width <= 800) return 1.5;
+      if (width <= 1367) return 1.3;
+      return 1.2;
+    }
+
+    function updatePositions() {
+      if (ticking) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const heroRect = heroImage.getBoundingClientRect();
+
+        // Establish baseline on first run
+        if (!baseline) {
+          baseline = {
+            documentTop: heroRect.top + scrollY,
+            left: heroRect.left,
+            width: heroRect.width
+          };
+          dynamite.style.left = `${baseline.left}px`;
+          dynamite.style.width = `${baseline.width}px`;
+          console.log('[Parallax] Baseline set:', baseline);
+        }
+
+        // Calculate dynamite position: moves faster than scroll DOWN
+        const parallaxSpeed = getParallaxSpeed();
+        const normalTop = baseline.documentTop - scrollY;
+        const extraFall = scrollY * (parallaxSpeed - 1);
+        const dynamiteTop = normalTop + extraFall;
+        dynamite.style.top = `${dynamiteTop}px`;
+
+        // Check if lore should appear
+        const loreRect = loreElement.getBoundingClientRect();
+        const loreDocumentTop = loreRect.top + scrollY;
+        const loreTrigger = loreDocumentTop - (window.innerHeight * 0.6);
+        
+        if (scrollY > loreTrigger) {
+          dynamite.style.opacity = '0';
+          loreElement.style.opacity = '1';
+        } else {
+          dynamite.style.opacity = '1';
+          loreElement.style.opacity = '0';
+        }
+
+        ticking = false;
+      });
+    }
+
+    function handleResize() {
+      baseline = null; // Reset on resize
+      updatePositions();
+    }
+
+    // Events
+    window.addEventListener('scroll', updatePositions, { passive: true });
+    window.addEventListener('resize', handleResize);
+
+    // Initial run
+    updatePositions();
+    console.log('[Parallax] Initialized');
+  }
+
+  document.addEventListener('DOMContentLoaded', initParallaxDynamite);
+</script>

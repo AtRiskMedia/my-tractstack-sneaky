@@ -27,13 +27,13 @@ const SettingsPanel = ({ config, availableCodeHooks }: SettingsPanelProps) => {
 
   return (
     <div
-      className="flex h-full max-w-sm flex-col rounded-xl bg-mydarkgrey bg-opacity-20 p-0.5 backdrop-blur-sm"
+      className="bg-mydarkgrey min-w-xs flex h-full max-w-sm flex-col rounded-xl bg-opacity-20 p-0.5 backdrop-blur-sm"
       style={
         {
           animation: window.matchMedia(
             '(prefers-reduced-motion: no-preference)'
           ).matches
-            ? 'fadeInFromHalf 150ms ease-in'
+            ? 'fadeInFromHalf 450ms ease-in'
             : 'none',
           '--fade-start': '0.5',
           '--fade-end': '1',
@@ -53,10 +53,10 @@ const SettingsPanel = ({ config, availableCodeHooks }: SettingsPanelProps) => {
         {/* Header Section (fixed height) */}
         <div className="flex-shrink-0 p-1.5 md:p-2.5">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-bold text-myblue">{panelTitle}</h3>
+            <h3 className="text-myblue text-lg font-bold">{panelTitle}</h3>
             <button
               onClick={() => settingsPanelStore.set(null)}
-              className="text-gray-500 hover:text-myblue"
+              className="hover:text-myblue text-gray-500"
             >
               <XMarkIcon className="h-5 w-5" />
             </button>

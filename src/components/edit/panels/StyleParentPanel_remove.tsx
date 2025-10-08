@@ -58,7 +58,7 @@ const StyleParentRemovePanel = ({ node, layer, className }: BasePanelProps) => {
         Remove <span className="font-bold">{friendlyName}</span>?
       </h3>
       <div className="space-y-4 rounded bg-slate-50 p-6">
-        <ul className="flex flex-wrap gap-x-4 gap-y-1 text-mydarkgrey">
+        <ul className="text-mydarkgrey flex flex-wrap gap-x-4 gap-y-1">
           <li>
             <em>Are you sure?</em>
           </li>
