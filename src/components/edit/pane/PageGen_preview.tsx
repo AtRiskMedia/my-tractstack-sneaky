@@ -12,6 +12,8 @@ import {
   getIntroDesign,
   getWithArtpackImageDesign,
 } from '@/utils/compositor/templateMarkdownStyles';
+import { tailwindToHex } from '@/utils/compositor/tailwindColors';
+import { SvgBreaks } from '@/constants/shapes';
 import {
   parsePageMarkdown,
   validatePageMarkdown,
@@ -243,8 +245,21 @@ export const PageCreationPreview = ({
               ? design.visualBreaks.odd()
               : design.visualBreaks.even();
 
-            breakTemplate.bgColour = aboveColor;
-            const svgFill = belowColor;
+            const breakData = breakTemplate.bgPane?.breakDesktop;
+            const shapeName = breakData
+              ? `${breakData.collection}${breakData.image}`
+              : '';
+            const isFlipped =
+              (shapeName && SvgBreaks[shapeName]?.flipped) || false;
+
+            breakTemplate.bgColour = tailwindToHex(
+              isFlipped ? belowColor : aboveColor,
+              null
+            );
+            const svgFill = tailwindToHex(
+              isFlipped ? aboveColor : belowColor,
+              null
+            );
             if (breakTemplate.bgPane) {
               if (breakTemplate.bgPane.breakDesktop) {
                 breakTemplate.bgPane.breakDesktop.svgFill = svgFill;
@@ -345,7 +360,7 @@ export const PageCreationPreview = ({
               </Select.Control>
               <Portal>
                 <Select.Positioner>
-                  <Select.Content className="sm:text-sm z-50 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none">
+                  <Select.Content className="z-50 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                     {themesCollection.items.map((theme) => (
                       <Select.Item
                         key={theme}
@@ -386,7 +401,7 @@ export const PageCreationPreview = ({
               </Select.Control>
               <Portal>
                 <Select.Positioner>
-                  <Select.Content className="sm:text-sm z-50 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none">
+                  <Select.Content className="z-50 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                     {designsCollection.items.map((item) => (
                       <Select.Item
                         key={item.index}

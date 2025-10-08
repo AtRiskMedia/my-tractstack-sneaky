@@ -18,6 +18,16 @@ export interface PaneSnapshotGeneratorProps {
 
 const snapshotCache = new Map<string, SnapshotData>();
 
+function hashString(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return hash.toString(36);
+}
+
 export const PaneSnapshotGenerator = ({
   id,
   htmlString,
@@ -31,7 +41,7 @@ export const PaneSnapshotGenerator = ({
   useEffect(() => {
     if (!htmlString || isGenerating) return;
 
-    const cacheKey = `${id}-${htmlString.length}-${outputWidth}`;
+    const cacheKey = `${id}-${hashString(htmlString)}-${outputWidth}`;
     if (snapshotCache.has(cacheKey)) {
       const cached = snapshotCache.get(cacheKey)!;
       onComplete(id, cached);
@@ -194,6 +204,15 @@ export const PaneSnapshotGenerator = ({
 
     generateSnapshot();
   }, [id, htmlString, isGenerating, onComplete, onError, config, outputWidth]);
+
+  // Show spinner while generating
+  if (isGenerating) {
+    return (
+      <div className="flex h-24 items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-600"></div>
+      </div>
+    );
+  }
 
   return null;
 };

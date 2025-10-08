@@ -2,6 +2,7 @@ import {
   useState,
   useEffect,
   useRef,
+  useMemo,
   type ChangeEvent,
   type KeyboardEvent,
 } from 'react';
@@ -174,11 +175,25 @@ export default function SearchModal({
     }
   };
 
-  const bestCompletion =
-    suggestions.length > 0 && query.length >= 3 ? suggestions[0].term : '';
+  // Determine the correct suggestion for autocompletion, prioritizing an exact match
+  // to align with the behavior of the 'Enter' key press.
+  const suggestionForDisplay = useMemo(() => {
+    if (query.length < 3 || suggestions.length === 0) {
+      return null;
+    }
+    const exactMatch = suggestions.find(
+      (s) => s.term.toLowerCase() === query.trim().toLowerCase()
+    );
+    return exactMatch || suggestions[0];
+  }, [suggestions, query]);
+
+  const bestCompletion = suggestionForDisplay ? suggestionForDisplay.term : '';
+
   const showCompletion =
     bestCompletion.toLowerCase().startsWith(query.toLowerCase()) &&
-    query.length >= 3;
+    query.length >= 3 &&
+    bestCompletion.length > query.length;
+
   let preservedCompletion = '';
   if (showCompletion) {
     const completionText = bestCompletion.slice(query.length);
@@ -186,6 +201,7 @@ export default function SearchModal({
       ? '\u00A0' + completionText.slice(1)
       : completionText;
   }
+
   const showSuggestions =
     suggestions.length > 0 && !searchResults && query.length >= 3;
   const showResults = searchResults !== null;
@@ -204,7 +220,7 @@ export default function SearchModal({
         <Dialog.Backdrop className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm" />
         <Dialog.Positioner className="fixed inset-0 z-50 mx-auto max-w-3xl p-2 pt-16 md:p-4">
           <Dialog.Content
-            className="mx-auto w-full overflow-hidden rounded-lg bg-mywhite shadow-2xl"
+            className="bg-mywhite mx-auto w-full overflow-hidden rounded-lg shadow-2xl"
             style={{ height: '80vh' }}
           >
             <div className="relative w-full border-b border-gray-200 p-4">
@@ -252,7 +268,7 @@ export default function SearchModal({
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
                     placeholder="Search content..."
-                    className="relative z-10 w-full border-none bg-transparent text-xl text-mydarkgrey placeholder-gray-500 outline-none"
+                    className="text-mydarkgrey relative z-10 w-full border-none bg-transparent text-xl placeholder-gray-500 outline-none"
                     style={{ background: 'transparent', padding: '0' }}
                   />
                 </div>
@@ -260,7 +276,7 @@ export default function SearchModal({
 
               <button
                 onClick={handleClose}
-                className="absolute right-4 top-6 rounded-lg p-2 text-mydarkgrey transition-colors hover:bg-gray-100 hover:text-myblue"
+                className="text-mydarkgrey hover:text-myblue absolute right-4 top-6 rounded-lg p-2 transition-colors hover:bg-gray-100"
                 aria-label="Close search"
               >
                 <XMarkIcon className="h-6 w-6" />
@@ -293,8 +309,8 @@ export default function SearchModal({
 
               {query.trim().length >= 3 && isDiscovering && (
                 <div className="w-full p-8 text-center">
-                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-myblue"></div>
-                  <p className="mt-4 text-mydarkgrey">Discovering...</p>
+                  <div className="border-myblue inline-block h-8 w-8 animate-spin rounded-full border-b-2"></div>
+                  <p className="text-mydarkgrey mt-4">Discovering...</p>
                 </div>
               )}
 
@@ -303,7 +319,7 @@ export default function SearchModal({
                   <p>Discovery failed: {discoverError}</p>
                   <button
                     onClick={() => discoverTerms(query.trim())}
-                    className="mt-2 text-myblue hover:underline"
+                    className="text-myblue mt-2 hover:underline"
                   >
                     Try again
                   </button>
@@ -312,7 +328,7 @@ export default function SearchModal({
 
               {showSuggestions && (
                 <div className="w-full p-6">
-                  <p className="mb-4 text-sm font-bold text-mydarkgrey">
+                  <p className="text-mydarkgrey mb-4 text-sm font-bold">
                     Suggestions ({suggestions.length})
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -328,7 +344,7 @@ export default function SearchModal({
                       </button>
                     ))}
                   </div>
-                  <p className="mt-4 text-xs text-mydarkgrey">
+                  <p className="text-mydarkgrey mt-4 text-xs">
                     Click a suggestion or press Enter to search
                   </p>
                   <div className="mt-6 border-t border-gray-200 pt-4">
@@ -362,8 +378,8 @@ export default function SearchModal({
 
               {isRetrieving && (
                 <div className="w-full p-8 text-center">
-                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-myblue"></div>
-                  <p className="mt-4 text-mydarkgrey">Searching...</p>
+                  <div className="border-myblue inline-block h-8 w-8 animate-spin rounded-full border-b-2"></div>
+                  <p className="text-mydarkgrey mt-4">Searching...</p>
                 </div>
               )}
 

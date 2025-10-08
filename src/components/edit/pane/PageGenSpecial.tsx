@@ -2,13 +2,13 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { RadioGroup } from '@ark-ui/react/radio-group';
 import { ulid } from 'ulid';
-import FeaturedContentPreview from '@/components/compositor/preview/FeaturedContentPreview';
-import ListContentPreview from '@/components/compositor/preview/ListContentPreview';
 import VisualBreakPreview from '@/components/compositor/preview/VisualBreakPreview';
 import { getTemplateVisualBreakPane } from '@/utils/compositor/TemplatePanes';
 import { fullContentMapStore } from '@/stores/storykeep';
 import type { NodesContext } from '@/stores/nodes';
 import { findUniqueSlug } from '@/utils/helpers';
+import { tailwindToHex } from '@/utils/compositor/tailwindColors';
+import { SvgBreaks } from '@/constants/shapes';
 import type { StoryFragmentNode, TemplatePane } from '@/types/compositorTypes';
 
 // Layout options with IDs, labels, and descriptions
@@ -95,19 +95,14 @@ const PageCreationSpecial = ({
       const featuredContentPane: TemplatePane = {
         id: ulid(),
         nodeType: 'Pane',
-        title: 'Featured Content',
-        slug: findUniqueSlug(`featured-content`, existingSlugs),
+        title: 'Featured Article',
+        slug: findUniqueSlug(`featured-article`, existingSlugs),
         isDecorative: false,
         parentId: nodeId,
-        codeHookTarget: 'featured-content',
+        codeHookTarget: 'featured-article',
         codeHookPayload: {
           options: JSON.stringify({
-            title: 'Featured Content',
-            featured: true,
-            slugs: '',
-            category: '',
-            limit: '6',
-            showDate: 'true',
+            title: 'Featured Article',
           }),
         },
       };
@@ -128,24 +123,36 @@ const PageCreationSpecial = ({
         const bgColor = breakVariant?.odd ? 'white' : 'gray-50';
         const fillColor = breakVariant?.odd ? 'gray-50' : 'white';
 
+        const shapeName = `kCz${selectedBreak}`;
+        const isFlipped = SvgBreaks[shapeName]?.flipped || false;
+
+        const finalBgColor = tailwindToHex(
+          isFlipped ? fillColor : bgColor,
+          null
+        );
+        const finalFillColor = tailwindToHex(
+          isFlipped ? bgColor : fillColor,
+          null
+        );
+
         // 2. Create Visual Break pane
         const visualBreakTemplate = getTemplateVisualBreakPane(selectedBreak);
         visualBreakTemplate.id = ulid();
         visualBreakTemplate.title = 'Visual Break';
         visualBreakTemplate.slug = `${storyfragment.slug}-visual-break`;
-        visualBreakTemplate.bgColour = bgColor;
+        visualBreakTemplate.bgColour = finalBgColor;
 
         // Configure the SVG fill color
         if (visualBreakTemplate.bgPane) {
           if (visualBreakTemplate.bgPane.type === 'visual-break') {
             if (visualBreakTemplate.bgPane.breakDesktop) {
-              visualBreakTemplate.bgPane.breakDesktop.svgFill = fillColor;
+              visualBreakTemplate.bgPane.breakDesktop.svgFill = finalFillColor;
             }
             if (visualBreakTemplate.bgPane.breakTablet) {
-              visualBreakTemplate.bgPane.breakTablet.svgFill = fillColor;
+              visualBreakTemplate.bgPane.breakTablet.svgFill = finalFillColor;
             }
             if (visualBreakTemplate.bgPane.breakMobile) {
-              visualBreakTemplate.bgPane.breakMobile.svgFill = fillColor;
+              visualBreakTemplate.bgPane.breakMobile.svgFill = finalFillColor;
             }
           }
         }
@@ -171,7 +178,10 @@ const PageCreationSpecial = ({
           isDecorative: false,
           parentId: nodeId,
           // For complete-home layout, match the background color with the visual break
-          bgColour: selectedLayout === 'complete-home' ? 'gray-50' : 'white',
+          bgColour: tailwindToHex(
+            selectedLayout === 'complete-home' ? 'gray-50' : 'white',
+            null
+          ),
           codeHookTarget: 'list-content',
           codeHookPayload: {
             options: JSON.stringify({
@@ -220,7 +230,7 @@ const PageCreationSpecial = ({
   return (
     <div className="rounded-md bg-white p-6">
       <style>{radioGroupStyles}</style>
-      <div className="mb-6 space-y-6 italic text-mydarkgrey">
+      <div className="text-mydarkgrey mb-6 space-y-6 italic">
         <strong>Note:</strong> when editing web pages (story fragments) be sure
         to click on Topics &amp; Details for each page; (if you see no articles,
         that's why!)
@@ -270,7 +280,7 @@ const PageCreationSpecial = ({
             <div className="mb-2 text-lg font-bold">
               Select Visual Break Style
             </div>
-            <div className="lg:grid-cols-5 grid grid-cols-2 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
               {breakVariants.map((breakVar) => (
                 <div
                   key={breakVar.id}
@@ -295,39 +305,6 @@ const PageCreationSpecial = ({
                 </div>
               ))}
             </div>
-          </div>
-        )}
-      </div>
-
-      <div className="mt-8 rounded-lg border bg-white p-4 shadow-md">
-        <h3 className="mb-4 text-lg font-bold">Preview</h3>
-
-        {selectedLayout === 'featured-only' && <FeaturedContentPreview />}
-
-        {selectedLayout === 'featured-list' && (
-          <div>
-            <FeaturedContentPreview />
-            <ListContentPreview bgColour="#ffffff" />
-          </div>
-        )}
-
-        {selectedLayout === 'complete-home' && (
-          <div>
-            <FeaturedContentPreview />
-            <VisualBreakPreview
-              bgColour={
-                breakVariants.find((b) => b.id === selectedBreak)?.odd
-                  ? '#ffffff'
-                  : '#f1f5f9'
-              }
-              fillColour={
-                breakVariants.find((b) => b.id === selectedBreak)?.odd
-                  ? '#f1f5f9'
-                  : '#ffffff'
-              }
-              variant={selectedBreak}
-            />
-            <ListContentPreview bgColour="#f1f5f9" />
           </div>
         )}
       </div>

@@ -4,7 +4,7 @@ import { RadioGroup } from '@ark-ui/react/radio-group';
 import CheckCircleIcon from '@heroicons/react/20/solid/CheckCircleIcon';
 import CubeTransparentIcon from '@heroicons/react/24/outline/CubeTransparentIcon';
 import DocumentIcon from '@heroicons/react/24/outline/DocumentIcon';
-import NewspaperIcon from '@heroicons/react/24/outline/NewspaperIcon';
+//import NewspaperIcon from '@heroicons/react/24/outline/NewspaperIcon';
 import ExclamationTriangleIcon from '@heroicons/react/24/outline/ExclamationTriangleIcon';
 import AddPanePanel from './AddPanePanel';
 import PageCreationGen from './PageGen';
@@ -75,21 +75,21 @@ export const PageCreationSelector = ({
         : []),
     ];
 
-    const featuredMode = {
-      id: 'featured',
-      name: 'Featured Content home page',
-      description:
-        'A layout with a prominent hero section showcasing a featured article and grid of additional top articles',
-      icon: NewspaperIcon,
-      active: true,
-      disabled: validPagesCount < 3,
-      disabledReason:
-        validPagesCount === 0
-          ? 'Not yet available; no pages with SEO metadata found.'
-          : `Not yet available; requires at least 3 pages with SEO metadata (currently ${validPagesCount}).`,
-    };
+    //const featuredMode = {
+    //  id: 'featured',
+    //  name: 'Featured Content home page',
+    //  description:
+    //    'A layout with a prominent hero section showcasing a featured article and grid of additional top articles',
+    //   icon: NewspaperIcon,
+    //  active: true,
+    //  disabled: validPagesCount < 3,
+    //  disabledReason:
+    //   validPagesCount === 0
+    //     ? 'Not yet available; no pages with SEO metadata found.'
+    //     : `Not yet available; requires at least 3 pages with SEO metadata (currently ${validPagesCount}).`,
+    //};
 
-    return [...baseModesWithoutFeature, featuredMode] as CreationMode[];
+    return [...baseModesWithoutFeature /*, featuredMode */] as CreationMode[];
   }, [validPagesCount]);
 
   const handleContinue = () => {
@@ -144,7 +144,7 @@ export const PageCreationSelector = ({
     <div className="p-0.5 shadow-inner">
       <style>{radioGroupStyles}</style>
       <div className="w-full rounded-md bg-white p-6">
-        <h2 className="mb-6 font-action text-2xl font-bold text-gray-900">
+        <h2 className="font-action mb-6 text-2xl font-bold text-gray-900">
           How would you like to create your page?
         </h2>
 

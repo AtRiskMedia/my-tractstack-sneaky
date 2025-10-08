@@ -2,36 +2,9 @@ import { useStore } from '@nanostores/react';
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon';
 import { getCtx } from '@/stores/nodes';
 import { toggleSettingsPanel } from '@/stores/storykeep';
+import { toolAddModeTitles, toolAddModes } from '@/constants';
 
 import type { ToolAddMode } from '@/types/compositorTypes';
-
-const toolAddModeTitles: Record<ToolAddMode, string> = {
-  p: 'Paragraph',
-  h2: 'Heading 2',
-  h3: 'Heading 3',
-  h4: 'Heading 4',
-  img: 'Image',
-  signup: 'Email Sign-up Widget',
-  yt: 'YouTube Video',
-  bunny: 'Bunny Video',
-  belief: 'Belief Select',
-  identify: 'Identity As',
-  toggle: 'Toggle Belief',
-};
-
-const toolAddModes: ToolAddMode[] = [
-  'p',
-  'h2',
-  'h3',
-  'h4',
-  'img',
-  'signup',
-  'yt',
-  'bunny',
-  'belief',
-  'identify',
-  'toggle',
-];
 
 const AddElementsPanel = ({
   currentToolAddMode,
@@ -54,7 +27,7 @@ const AddElementsPanel = ({
           className={`rounded px-3 py-1.5 text-sm font-bold transition-colors ${
             currentToolAddMode === mode
               ? 'bg-myblue text-white'
-              : 'border border-gray-200 bg-white text-myblue hover:bg-myblue/10'
+              : 'text-myblue hover:bg-myblue/10 border border-gray-200 bg-white'
           }`}
         >
           {toolAddModeTitles[mode]}
@@ -79,13 +52,13 @@ const StoryKeepToolBar = () => {
   return (
     <div className="w-full max-w-lg rounded-lg border border-gray-200 bg-white p-4 shadow-xl">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-bold text-myblue">Add Elements</h3>
+        <h3 className="text-myblue text-lg font-bold">Add Elements</h3>
         <button
           onClick={() => {
             ctx.toolModeValStore.set({ value: `text` });
             toggleSettingsPanel;
           }}
-          className="text-gray-500 hover:text-myblue"
+          className="hover:text-myblue text-gray-500"
         >
           <XMarkIcon className="h-5 w-5" />
         </button>

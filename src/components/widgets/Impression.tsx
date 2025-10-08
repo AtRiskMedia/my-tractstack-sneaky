@@ -80,14 +80,14 @@ const Impression = ({ payload, currentPage, config }: ImpressionProps) => {
       <h3 className="text-md font-action leading-6 text-black">
         {payload.title}
       </h3>
-      <div className="mt-2 xs:flex xs:items-start xs:justify-between">
+      <div className="xs:flex xs:items-start xs:justify-between mt-2">
         <div className="max-w-xl text-sm text-black">
           <p>
             {payload.body}
             {` `}
             <a
               onClick={() => pushEvent()}
-              className="cursor-pointer text-black underline underline-offset-4 hover:text-myorange"
+              className="hover:text-myorange cursor-pointer text-black underline underline-offset-4"
               href={actionPayload || '#'}
             >
               {payload.buttonText}

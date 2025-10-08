@@ -1,5 +1,6 @@
 ---
-import FeaturedContent from '@/components/codehooks/FeaturedContent.astro';
+import SearchWidget from '@/components/codehooks/SearchWidget.tsx';
+import FeaturedArticle from '@/components/codehooks/FeaturedArticle.astro';
 import ListContent from '@/components/codehooks/ListContent.astro';
 import BunnyVideoWrapper from '@/components/codehooks/BunnyVideoWrapper.astro';
 import EpinetWrapper from '@/components/codehooks/EpinetWrapper';
@@ -25,13 +26,14 @@ const { target, options, fullContentMap /*, resourcesPayload = {} */ } =
   Astro.props;
 
 export const components = {
-  'featured-content': true,
+  'featured-article': true,
   'list-content': true,
   'bunny-video': true,
   'character-grid': true,
   'collection-hero': true,
   'sneaky-home': true,
   'sneaky-noah': true,
+  'search-widget': true,
   epinet: true,
 };
 ---
@@ -39,8 +41,10 @@ export const components = {
 {
   target === 'list-content' ? (
     <ListContent options={options} contentMap={fullContentMap} />
-  ) : target === 'featured-content' ? (
-    <FeaturedContent options={options} contentMap={fullContentMap} />
+  ) : target === 'featured-article' ? (
+    <FeaturedArticle options={options} contentMap={fullContentMap} />
+  ) : target === 'search-widget' ? (
+    <SearchWidget fullContentMap={fullContentMap} client:load />
   ) : target === 'bunny-video' ? (
     <BunnyVideoWrapper options={options} />
   ) : target === 'epinet' ? (

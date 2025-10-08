@@ -2,11 +2,13 @@ import { useEffect, useState, memo, Fragment, type CSSProperties } from 'react';
 import { getCtx } from '@/stores/nodes';
 import { viewportKeyStore } from '@/stores/storykeep';
 import { RenderChildren } from './RenderChildren';
-import FeaturedContentSetup from '@/components/codehooks/FeaturedContentSetup';
+import FeaturedArticleSetup from '@/components/codehooks/FeaturedArticleSetup';
 import ListContentSetup from '@/components/codehooks/ListContentSetup';
 import BunnyVideoSetup from '@/components/codehooks/BunnyVideoSetup';
 import type { BgImageNode, ArtpackImageNode } from '@/types/compositorTypes';
 import type { NodeProps } from '@/types/nodeProps';
+
+const TARGETS = ['list-content', 'featured-article', 'bunny-video'];
 
 const CodeHookContainer = ({
   payload,
@@ -30,7 +32,7 @@ const CodeHookContainer = ({
               <Fragment key={key}>
                 <span className="min-w-24 font-bold text-gray-600">{key}:</span>
                 <div className="ml-2 flex flex-wrap gap-1">
-                  {value.split('|').map((item, index) => (
+                  {value.split(/,|\|/).map((item, index) => (
                     <span
                       key={index}
                       className="inline-block rounded bg-gray-200 px-2 py-0.5 text-xs text-gray-800"
@@ -155,15 +157,24 @@ const Pane = memo(
           id={getCtx(props).getNodeSlug(props.nodeId)}
           className={useFlexLayout ? '' : wrapperClasses}
         >
-          {codeHookPayload && codeHookTarget === 'featured-content' ? (
-            <FeaturedContentSetup
+          {codeHookPayload && codeHookTarget === 'featured-article' ? (
+            <FeaturedArticleSetup
               nodeId={props.nodeId}
               params={codeHookParams}
+              config={props.config!}
             />
           ) : codeHookPayload && codeHookTarget === 'list-content' ? (
-            <ListContentSetup nodeId={props.nodeId} params={codeHookParams} />
+            <ListContentSetup
+              nodeId={props.nodeId}
+              params={codeHookParams}
+              config={props.config!}
+            />
           ) : codeHookPayload && codeHookTarget === 'bunny-video' ? (
-            <BunnyVideoSetup nodeId={props.nodeId} params={codeHookParams} />
+            <BunnyVideoSetup
+              nodeId={props.nodeId}
+              params={codeHookParams}
+              config={props.config!}
+            />
           ) : codeHookPayload && codeHookTarget ? (
             <CodeHookContainer
               payload={{ target: codeHookTarget, params: codeHookParams }}
@@ -216,11 +227,7 @@ const Pane = memo(
                   !(
                     codeHookPayload &&
                     typeof codeHookTarget === 'string' &&
-                    [
-                      'list-content',
-                      'featured-content',
-                      'bunny-video',
-                    ].includes(codeHookTarget)
+                    TARGETS.includes(codeHookTarget)
                   )
                 )
                   getCtx(props).setClickedNodeId(props.nodeId, true);
@@ -246,11 +253,7 @@ const Pane = memo(
                   !(
                     codeHookPayload &&
                     typeof codeHookTarget === 'string' &&
-                    [
-                      'list-content',
-                      'featured-content',
-                      'bunny-video',
-                    ].includes(codeHookTarget)
+                    TARGETS.includes(codeHookTarget)
                   )
                 )
                   getCtx(props).setClickedNodeId(props.nodeId, true);
