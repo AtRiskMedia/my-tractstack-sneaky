@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     tractstack({
       includeExamples: false,
-      enableMultiTenant: false,
+      enableMultiTenant: undefined,
     }),
   ],
   output: 'server',

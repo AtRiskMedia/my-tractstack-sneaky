@@ -1,0 +1,86 @@
+---
+import type { ResourceNode } from '@/types/compositorTypes';
+
+export interface Props {
+  product?: ResourceNode;
+}
+
+const { product } = Astro.props;
+
+// Helper variables to check for the existence of buy links
+const buyWithCardLink = product?.optionsPayload?.buyLink;
+const buyWithCryptoLink = product?.optionsPayload?.buyWithCryptoLink;
+const hasPurchaseOptions = buyWithCardLink || buyWithCryptoLink;
+---
+
+<div class="flex h-full flex-col items-center p-6 text-center">
+  {
+    product ? (
+      <>
+        <div class="mb-4">
+          {product.optionsPayload?.image?.src && (
+            <img
+              src={product.optionsPayload.image.src}
+              alt={`Image of ${product.title}`}
+              class="h-96 w-auto object-contain"
+              loading="lazy"
+            />
+          )}
+        </div>
+
+        <h3 class="text-2xl font-bold uppercase tracking-wider text-gray-900">
+          {product.title}
+        </h3>
+
+        {product.oneLiner && (
+          <p class="mb-5 text-sm text-gray-500">{product.oneLiner}</p>
+        )}
+
+        <div class="mt-auto pt-4">
+          <span class="text-sm font-bold text-gray-600">Buy with</span>
+          <div class="mt-2 flex items-center justify-center gap-3">
+            {hasPurchaseOptions ? (
+              <>
+                {buyWithCryptoLink && (
+                  <a
+                    href={buyWithCryptoLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="rounded-md bg-black px-6 py-2 font-bold text-white transition-colors hover:bg-gray-700"
+                  >
+                    Crypto
+                  </a>
+                )}
+                {buyWithCardLink && (
+                  <a
+                    href={buyWithCardLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="rounded-md bg-black px-6 py-2 font-bold text-white transition-colors hover:bg-gray-700"
+                  >
+                    Card
+                  </a>
+                )}
+              </>
+            ) : (
+              <button
+                disabled
+                class="cursor-not-allowed rounded-md bg-gray-200 px-6 py-2 font-bold text-gray-500"
+              >
+                Coming soon
+              </button>
+            )}
+          </div>
+        </div>
+      </>
+    ) : (
+      <div class="flex h-full w-full items-center justify-center rounded-md bg-red-50 p-4">
+        <div>
+          <p class="font-bold text-red-800">
+            Error: ProductCard component received no product data.
+          </p>
+        </div>
+      </div>
+    )
+  }
+</div>

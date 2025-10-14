@@ -8,6 +8,8 @@ import SneakyHome from '@/custom/SneakyHome.astro';
 import SneakyNoah from '@/custom/SneakyNoah.astro';
 import CollectionHero from '@/custom/components/CollectionHero.astro';
 import CharacterGrid from '@/custom/components/CharacterGrid.astro';
+import ProductCardWrapper from './ProductCardWrapper.astro';
+import ProductGrid from './ProductGrid.astro';
 import type { FullContentMapItem } from '@/types/tractstack';
 import type { ResourceNode } from '@/types/compositorTypes';
 
@@ -22,7 +24,7 @@ export interface Props {
   };
 }
 
-const { target, options, fullContentMap /*, resourcesPayload = {} */ } =
+const { target, options, fullContentMap, resourcesPayload = {} } =
   Astro.props;
 
 export const components = {
@@ -34,12 +36,18 @@ export const components = {
   'sneaky-home': true,
   'sneaky-noah': true,
   'search-widget': true,
+   'product-card': true,
+  'product-grid': true,
   epinet: true,
 };
 ---
 
 {
-  target === 'list-content' ? (
+  target === 'product-card' ? (
+    <ProductCardWrapper options={options} resourcesPayload={resourcesPayload} />
+  ) : target === 'product-grid' ? (
+    <ProductGrid options={options} resourcesPayload={resourcesPayload} />
+  ) : target === 'list-content' ? (
     <ListContent options={options} contentMap={fullContentMap} />
   ) : target === 'featured-article' ? (
     <FeaturedArticle options={options} contentMap={fullContentMap} />
